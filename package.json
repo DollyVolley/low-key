@@ -1,0 +1,45 @@
+{
+  "scripts": {
+    "build": "webpack --stats-children",
+    "serve": "webpack-dev-server --open"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "@babel/preset-react": "^7.17.12",
+    "@types/react": "^18.0.9",
+    "@types/react-burger-menu": "^2.8.3",
+    "@types/react-dom": "^18.0.5",
+    "@types/styled-components": "^5.1.25",
+    "@wasm-tool/wasm-pack-plugin": "^1.6.0",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "html-loader": "^3.1.0",
+    "html-webpack-plugin": "^5.5.0",
+    "node-sass": "^7.0.1",
+    "sass-loader": "^13.0.0",
+    "style-loader": "^3.3.1",
+    "styled-components": "^5.3.5",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.2",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.9.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.9.1",
+    "buffer": "^6.0.3",
+    "react": "^18.1.0",
+    "react-burger-menu": "^3.0.8",
+    "react-dom": "^18.1.0",
+    "react-is": "^18.1.0",
+    "react-responsive": "^9.0.0-beta.8",
+    "react-router-dom": "^6.3.0",
+    "recoil": "^0.7.3",
+    "suspend-react": "^0.0.8",
+    "typeface-roboto": "^1.1.13"
+  }
+}
