@@ -3,10 +3,11 @@
 ## Milestone MVP
 #### Fixes
 - Create header
-- Move burger button to header and center view
 - Only show necessary fields in views
 
 ### General
+- use MUI drawer instead of burger
+- use stepper for channel creation
 - Set up project board
 - UI/UX decisions
 

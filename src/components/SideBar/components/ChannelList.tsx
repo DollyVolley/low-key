@@ -13,7 +13,10 @@ export const ChannelList: FC = () => {
     <ContactWrapper>
         <List>
             {channelDescriptions.length !== 0 && channelDescriptions.map((description: ChannelDescriptor) => {
-             return <ChannelCard key={description.channelID} description={description} />
+             return <ChannelCard 
+                        key={description.channelID} 
+                        description={description} 
+                        />
             })}
         </List>
 

@@ -1,16 +1,18 @@
 import React, {FC, useEffect} from 'react';
 import {useMediaQueries} from "@/hooks/useMediaQueries";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { AppRoutes } from '@/routing';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { SideBar } from '@/components/SideBar/SideBar';
 import styled from 'styled-components';
-import { accountAtom } from './store/account/state/account';
 import { loadStreams } from './logic/message-service/MessageService';
 import { isStreamsLoadedAtom } from './store/app';
+import { SwipeableDrawer } from '@mui/material';
+import { showDrawerAtom } from './store/app/drawer/showDrawer';
 
 export const App: FC = () => {
     const setIsStreamsLoaded = useSetRecoilState(isStreamsLoadedAtom)
+    const [showDrawer, setShowDrawer] = useRecoilState(showDrawerAtom)
 
     useEffect(()=> {
         preFetchAsyncImport()
@@ -27,13 +29,16 @@ export const App: FC = () => {
     return (
     <ApplicationWrapperStyled>
         <Router >
-            <div id='outer-container'>
-
+            <SwipeableDrawer
+                anchor={'left'}
+                open={showDrawer}
+                onClose={() => setShowDrawer(false)}
+                onOpen={() => setShowDrawer(true)}
+                variant={is515PxOrLess ? 'temporary' : 'persistent'}
+            >
                 <SideBar/>
-                <div id='page-wrap'>
-                    <AppRoutes />
-                </div>
-            </div>
+            </SwipeableDrawer>
+            <AppRoutes />
         </Router>
     </ApplicationWrapperStyled>
     )
@@ -42,6 +47,3 @@ export const App: FC = () => {
 const ApplicationWrapperStyled = styled.div` 
     font-family: 'Roboto', sans-serif;
     `
-
-
-

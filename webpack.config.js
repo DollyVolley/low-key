@@ -33,7 +33,8 @@ module.exports = {
         {
             test: /\.html/,
             use: ['html-loader']
-        },      {
+        },      
+        {
           test: /\.css$/i,
           use: ["style-loader", "css-loader"],
         },
@@ -50,7 +51,11 @@ module.exports = {
               },
               'sass-loader'
             ]
-        }]
+        },
+        {
+          test: /\.(jpe?g|png|gif|svg)$/i, 
+          type: "asset/resource",
+      }]
     },
     plugins: [
       new HtmlWebpackPlugin({
