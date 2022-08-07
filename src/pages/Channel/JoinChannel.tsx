@@ -38,7 +38,7 @@ export const JoinChannel: FC = () => {
 
     return (
     <PageWrapper> 
-        <UiBoxContainer title={'Join Chat'}>
+        <UiBoxContainer title={'Join existing Chat'}>
             
             <SectionWrapperStyled>
                 <UITextField label={'Name'} value={name} setValue={setName} />

@@ -13,10 +13,17 @@ import { showDrawerAtom } from './store/app/drawer/showDrawer';
 export const App: FC = () => {
     const setIsStreamsLoaded = useSetRecoilState(isStreamsLoadedAtom)
     const [showDrawer, setShowDrawer] = useRecoilState(showDrawerAtom)
+    const {is1200PxOrLess} = useMediaQueries()
+
 
     useEffect(()=> {
         preFetchAsyncImport()
     }, [])
+
+    useEffect(function manageDrawerVisibility() {
+        setShowDrawer(!is1200PxOrLess)
+
+    }, [is1200PxOrLess])
 
     // Loads the asyncronously imported stream library used in the message service immediately
     async function preFetchAsyncImport() {
@@ -24,7 +31,6 @@ export const App: FC = () => {
         setIsStreamsLoaded(true)
     }
 
-    const {is515PxOrLess} = useMediaQueries()
 
     return (
     <ApplicationWrapperStyled>
@@ -34,11 +40,13 @@ export const App: FC = () => {
                 open={showDrawer}
                 onClose={() => setShowDrawer(false)}
                 onOpen={() => setShowDrawer(true)}
-                variant={is515PxOrLess ? 'temporary' : 'persistent'}
+                variant={is1200PxOrLess ? 'temporary' : 'permanent'}
             >
                 <SideBar/>
             </SwipeableDrawer>
-            <AppRoutes />
+            <RouteWrapperStyled className={is1200PxOrLess? '' : 'persistentDrawer'}>
+                <AppRoutes />
+            </RouteWrapperStyled>
         </Router>
     </ApplicationWrapperStyled>
     )
@@ -47,3 +55,8 @@ export const App: FC = () => {
 const ApplicationWrapperStyled = styled.div` 
     font-family: 'Roboto', sans-serif;
     `
+const RouteWrapperStyled = styled.div`
+    &.persistentDrawer {
+        margin-left: 250px;
+    }
+`

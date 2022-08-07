@@ -18,8 +18,6 @@ export const SideBar: FC = () => {
             <MenuButtonStyled to="/channel/create">Create Chat</MenuButtonStyled> 
             <MenuButtonStyled to="/channel/join">Join Chat</MenuButtonStyled> 
         </NewContactMenuStyled>
-    
-        <hr/>
 
         <ChannelList/>
 
@@ -44,7 +42,7 @@ const NewContactMenuStyled = styled.div`
 `
 
 const MenuButtonStyled = styled(Link)`
-    color: white;
+    color: #3a3a3e;
     text-decoration: none;
     font-size: 16pt;
     font-weight: bold;

@@ -73,7 +73,7 @@ export const ChannelThread: FC = () => {
     return (
     <MessageThreadWrapper >
         {!!channel && <>
-            <MessagesWrapper className={is1300PxOrLess? 'md': ''}>
+            <MessagesWrapper>
                 {messages.map((message: ChatMessage) => {
                     return <MessageWrapper key={message.timestamp}>
                         <MessageCard message={message} isOwnMessage={message.isOwn} />
@@ -104,13 +104,9 @@ const MessagesWrapper = styled.div`
     --max-width-padding: calc((100% - var(--max-width))/2);
     padding: 0 var(--max-width-padding);
     overflow-y: auto;
-
-    &.md {
-        padding: 0 10px;
-    }
 `
 const MessageWrapper = styled.div`
-    margin: 10px 0;
+    margin: 10px;
 `
 const MessageInputStyled = styled(MessageInput)`
     width: var(--max-width);

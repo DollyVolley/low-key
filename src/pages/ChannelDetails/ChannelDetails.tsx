@@ -31,8 +31,6 @@ export const ChannelDetails: FC = () => {
 
     return (<PageWrapper> 
         
-        <h1 onClick={goBack}> { hasStarted && <IconStyled/>}Manage Chat</h1>
-
         <FormWrapperStyled>
         {channel && <>
             <ChannelNameStyled>{channel.name}</ChannelNameStyled>
@@ -69,7 +67,7 @@ const IconStyled = styled(ArrowBackIosNewIcon)`
 `
 
 const ChannelNameStyled = styled.h1`
-    font-size: 5em;
+    font-size: 4em;
 `
 
 const ChannelActorWrapper = styled.div`

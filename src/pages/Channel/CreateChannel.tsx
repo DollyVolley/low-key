@@ -39,9 +39,9 @@ export const CreateChannel: FC = () => {
 
     return ( 
         <PageWrapperStyled>
-            <UiBoxContainer title='Create a new Chat'>
+            <UiBoxContainer title='Create new Chat'>
                 <SectionWrapperStyled>
-                    <UITextField label="Chat Name" value={name} setValue={setName} />
+                    <UITextField label="Name" value={name} setValue={setName} />
                 </SectionWrapperStyled>
 
                 <ButtonWrapperStyled> 

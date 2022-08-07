@@ -57,7 +57,7 @@ export const ChannelCard: FC<{description: ChannelDescriptor}> = ({description})
 }
 
 const ListItemStyled = styled(ListItem)`
-    background-color: rgba(164, 164, 167, 0.8);
+    background-color: rgba(229, 229, 229, 0.8);
     color: black;
 
     &.active { 
