@@ -1,11 +1,12 @@
 import React, {FC, useEffect, useState} from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import styled from "styled-components";
 import { UIButton } from '@/components/ui/button/UIButton';
-import { UIFormRow } from '@/components/ui/form';
 import { MessageService } from '@/logic/message-service';
 import { currentChannelSelector } from '@/store/channels/getters/currentChannel';
+import { UITextField } from '@/components/ui/text-field/UITextField';
+import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
 
 export const JoinChannel: FC = () => {
     const setChannel = useSetRecoilState(currentChannelSelector)
@@ -37,15 +38,24 @@ export const JoinChannel: FC = () => {
 
     return (
     <PageWrapper> 
-        <h1>Join Channel</h1>
+        <UiBoxContainer title={'Join existing Chat'}>
+            
+            <SectionWrapperStyled>
+                <UITextField label={'Name'} value={name} setValue={setName} />
+            </SectionWrapperStyled>
 
-        <FormWrapperStyled>
-            <UIFormRow label={'Channel Name'} state={{value: name, setValue: setName}} />
-            <UIFormRow label={'Join Link'} state={{value: link, setValue: setLink}} />
+            <SectionWrapperStyled>
+                <TextWrapperStyled>
+                    If you don't have a Join Link you can create a new chat and invite your chat partner <Link to={'/channel/create'}>here</Link>
+                </TextWrapperStyled>
+                <UITextField label={'Join Link'} value={link} setValue={setLink} />
+            </SectionWrapperStyled>
 
-            <UIButton text="Join" isLoading={loading} onClick={onJoin} disabled={isButtonDisabled()}/>
-        </FormWrapperStyled>
+            <ButtonWrapperStyled>
+                <UIButton text="Join" isLoading={loading} onClick={onJoin} disabled={isButtonDisabled()}/>
+            </ButtonWrapperStyled>
 
+        </UiBoxContainer>
     </PageWrapper>
     )
 }
@@ -53,9 +63,17 @@ export const JoinChannel: FC = () => {
 const PageWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    margin-top: 5vh;
 `
-const FormWrapperStyled = styled.div`
-    width: 100%;
-    margin: 0 auto;
+
+const TextWrapperStyled = styled.div`
+    margin-bottom: 20px;
+`
+
+const SectionWrapperStyled = styled.div`
+    margin-bottom: 30px;
+`
+
+const ButtonWrapperStyled = styled.div`
     text-align: center;
 `

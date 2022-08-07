@@ -8,6 +8,8 @@ import ListItemText from '@mui/material/ListItemText';
 import { useRecoilState } from "recoil";
 import { currentChannelIDAtom } from "@/store/channels/state/currentChannelID";
 import { useNavigate } from "react-router-dom";
+import { abbreviateText } from "@/utils/app/abbreviateText";
+import { getFormattedDateTime } from "@/utils/app/getFormattedTime";
 
 
 export const ChannelCard: FC<{description: ChannelDescriptor}> = ({description}) => {
@@ -29,9 +31,16 @@ export const ChannelCard: FC<{description: ChannelDescriptor}> = ({description})
     }
 
     function getSecondaryText(): string {
-        const lastChangeTime = new Date(description.lastChange).toLocaleTimeString()
-        if(!description.started) return `Created channel ${lastChangeTime}`
-        return `${description.lastMessage?.content} - ${lastChangeTime}`
+        const lastChangeTime = getFormattedDateTime(description.lastChange)
+
+        let messagePreview = ''
+        if(!description.started || !description.lastMessage) {
+            messagePreview = 'Created Channel'
+        } else {
+            messagePreview = abbreviateText(description.lastMessage.content, 17)
+        }
+
+        return `${messagePreview} - ${lastChangeTime}`
     }
 
     return (
@@ -48,10 +57,11 @@ export const ChannelCard: FC<{description: ChannelDescriptor}> = ({description})
 }
 
 const ListItemStyled = styled(ListItem)`
-    background-color: rgba(154, 154, 154, 0.8);
+    background-color: rgba(229, 229, 229, 0.8);
+    color: black;
 
     &.active { 
-        background-color: rgba(113, 113, 113, 0.8);
+        background-color: rgba(87, 87, 87, 0.8);
+        color: white;
     }
 `
-

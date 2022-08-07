@@ -1,12 +1,14 @@
-import React, {FC, useState} from 'react';
+import React, {FC, FormEvent, useState} from 'react';
 import styled from "styled-components";
 
 import { MessageService } from '@/logic/message-service';
 import { useNavigate } from 'react-router-dom';
-import { UIFormRow } from '@/components/ui/form';
 import { UIButton } from '@/components/ui/button/UIButton';
 import { useSetRecoilState } from 'recoil';
 import { currentChannelSelector } from '@/store';
+import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
+import { TextField } from '@mui/material';
+import { UITextField } from '@/components/ui/text-field/UITextField';
 
 
 export const CreateChannel: FC = () => {
@@ -15,6 +17,15 @@ export const CreateChannel: FC = () => {
 
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
+
+    function updateName(event: FormEvent): void {
+        const value = (event.target as HTMLTextAreaElement).value
+        if(value[value.length - 1] === "\n") {
+            onCreate()
+        } else {
+            setName(value)
+        }
+    }
 
 
     async function onCreate() {
@@ -26,43 +37,31 @@ export const CreateChannel: FC = () => {
         navigate(`/channel/id/${channel.channelID}`)   
     }
 
-    return (<PageWrapperStyled> 
-        <h1>Create Channel</h1>
+    return ( 
+        <PageWrapperStyled>
+            <UiBoxContainer title='Create new Chat'>
+                <SectionWrapperStyled>
+                    <UITextField label="Name" value={name} setValue={setName} />
+                </SectionWrapperStyled>
 
-        <FormWrapperStyled>
-            <UIFormRow label={'Channel Name'} state={{value: name, setValue: setName}} />
-            <UIButton text="Create" isLoading={loading} onClick={onCreate} />
-        </FormWrapperStyled>
-
-    </PageWrapperStyled>
+                <ButtonWrapperStyled> 
+                    <UIButton text="Create" isLoading={loading} onClick={onCreate} />
+                </ButtonWrapperStyled>
+            </UiBoxContainer>
+        </PageWrapperStyled>
     )
 }
 
 const PageWrapperStyled = styled.div`
-    display: flex;
-    flex-direction: column;
-`
-
-const FormWrapperStyled = styled.div`
-    width: 70%;
-    margin: 0 auto;
+    width: 100%;
+    margin: 5vh auto;
     text-align: center;
 `
 
-const InputWrapperStyled = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+const SectionWrapperStyled = styled.div`
+margin-bottom: 30px;
 `
 
-const LabelStyled = styled.label`
-    width: 25%;
-`
-
-const InputStyled = styled.input`
-    width: 70%;
-`
-
-const ButtonStyled = styled.button`
-    margin-top: 20px;
+const ButtonWrapperStyled = styled.div`
+text-align: center;
 `

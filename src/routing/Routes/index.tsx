@@ -1,5 +1,6 @@
-import BaseLayout from '@/layouts/BaseLayout';
+import BaseAppLayout from '@/layouts/BaseAppLayout';
 import ChannelLayout from '@/layouts/ChannelLayout';
+import ChatLayout from '@/layouts/ChatLayout';
 import React,{ FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { channelRoutes } from './channelRoutes';
@@ -14,12 +15,15 @@ export const AppRoutes: FC = () => {
       <Route path="/">
         <Route index element={FallbackView} />
 
-        <Route element={<ChannelLayout />}>
+        <Route element={<ChatLayout/>}>
           {threadRoutes}
+        </Route>
+
+        <Route element={<ChannelLayout />}>
           {channelRoutes}
         </Route>
 
-        <Route element={<BaseLayout/>}>
+        <Route element={<BaseAppLayout/>}>
           {homeRoutes}
         </Route>
 

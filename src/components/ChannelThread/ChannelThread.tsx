@@ -1,8 +1,8 @@
-import React, {FC, useEffect, useState} from 'react'
-import {MessageCard} from "@/components/ChannelThread/MessageCard/MessageCard";
+import React, {FC, useEffect, useRef, useState} from 'react'
+import {MessageCard} from "@/components/ChannelThread/components/MessageCard";
 import styled from "styled-components";
 import {ChatMessage} from "@/logic/message-service/types";
-import {MessageInput} from "@/components/ChannelThread/MessageInput/MessageInput";
+import {MessageInput} from "@/components/ChannelThread/components/MessageInput";
 import { useNavigate } from 'react-router-dom';
 import { MessageService } from '@/logic/message-service';
 import { useMutex } from '@/hooks/utils/useMutex';
@@ -11,9 +11,10 @@ import { currentChannelSelector } from '@/store';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useInterval } from '@/hooks/utils/useInterval';
 import { increaseSyncCountSelector, decreaseSyncCountSelector } from '@/store/app';
+import { useMediaQueries } from '@/hooks/useMediaQueries';
 
 
-export const MessageThread: FC = () => {
+export const ChannelThread: FC = () => {
     const [channel, setChannel] = useRecoilState(currentChannelSelector)
     const increaseSyncCount = useSetRecoilState(increaseSyncCountSelector)
     const decreaseSyncCount = useSetRecoilState(decreaseSyncCountSelector)
@@ -22,6 +23,10 @@ export const MessageThread: FC = () => {
 
     const [messages, setMessages] = useState<ChatMessage[]>([])
     const {getLock, releaseLock} = useMutex()
+    
+    const bottomRef = useRef<HTMLDivElement>(null);
+    const {is1300PxOrLess} = useMediaQueries()
+
 
     useEffect(function onChannelChange() { 
         if(!channel) {
@@ -42,7 +47,7 @@ export const MessageThread: FC = () => {
         const updatedChannel = await MessageService.fetchMessages(channel)
         decreaseSyncCount()
 
-        if(channel.channelID === updatedChannel.channelID && // channel has changed in the meantime
+        if(channel.channelID === updatedChannel.channelID && 
             updatedChannel.messages.length > channel.messages.length) {
                 setChannel(updatedChannel)
         }
@@ -61,9 +66,9 @@ export const MessageThread: FC = () => {
         releaseLock()
     }
 
-    function onChannelNameClick() {
-        navigate(`/channel/id/${channel!.channelID}`)
-    }
+    useEffect(function scrollToBottom() {
+        bottomRef.current?.scrollIntoView({behavior: 'auto'});
+      }, [messages]);
 
     return (
     <MessageThreadWrapper >
@@ -74,9 +79,10 @@ export const MessageThread: FC = () => {
                         <MessageCard message={message} isOwnMessage={message.isOwn} />
                     </MessageWrapper>
                 })}
+                <div ref={bottomRef} />
             </MessagesWrapper>
 
-            <MessageInput submitMessage={onMessageSubmit}/>
+            <MessageInputStyled submitMessage={onMessageSubmit}/>
             </>
         }
     </MessageThreadWrapper>
@@ -84,25 +90,24 @@ export const MessageThread: FC = () => {
 }
 
 const MessageThreadWrapper = styled.div`
-    --input-height: 100px;
+    --max-width: 1300px;
+    --input-height: 110px;
+    --channel-header-height: 80px;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding: 0 10px;
 `
 
 const MessagesWrapper = styled.div`
-    height: calc(100vh  - var(--input-height) - 60px);
+    height: calc(100vh  - var(--input-height) - var(--channel-header-height));
+    --max-width-padding: calc((100% - var(--max-width))/2);
+    padding: 0 var(--max-width-padding);
     overflow-y: auto;
 `
-
-const ContactLabel = styled.h1`
-    margin: 28px auto;
-    color: grey;
-    cursor: pointer;
-`
-
 const MessageWrapper = styled.div`
-    margin: 10px 0;
+    margin: 10px;
+`
+const MessageInputStyled = styled(MessageInput)`
+    width: var(--max-width);
 `

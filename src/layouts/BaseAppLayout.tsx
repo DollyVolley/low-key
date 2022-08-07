@@ -1,17 +1,13 @@
-import { ChatHeader } from '@/components/TheHeader/components/ChatHeader';
-import { ManageChatHeader } from '@/components/TheHeader/components/ManageChatHeader';
 import { TheHeader } from '@/components/TheHeader/TheHeader';
 import React,{ FC } from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 
-const ChannelLayout: FC = () => {  
+const BaseAppLayout: FC = () => {  
 
 return (
   <PageWrapperStyled>
-    <TheHeader> 
-      <ManageChatHeader />
-    </TheHeader>
+    <TheHeader/>
 
     <OutletWrapperStyled>
         <Outlet />
@@ -32,4 +28,4 @@ const OutletWrapperStyled = styled.div`
 
 `
 
-export default ChannelLayout;
+export default BaseAppLayout;

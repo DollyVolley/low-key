@@ -2,48 +2,41 @@ import React, { FormEvent } from "react";
 import { FC } from "react";
 import styled from "styled-components";
 import TextField from '@mui/material/TextField';
-import { UIButton } from "../button/UIButton";
-
+import { UiCopyButton } from "../button/UiCopyButton";
+import { PropaneSharp } from "@mui/icons-material";
 
 interface UITextFieldProps {
-    text: string,
+    value: string,
     label?: string, 
     isCopyable?: boolean,
+    width?: string,
+    setValue?: (value: string) => void
 }
 
 export const UITextField: FC<UITextFieldProps> = (props) => {
-    const [isCopied, setIsCopied] = React.useState(false);
+    const disabled = !props.setValue;
 
-    function copyToClipboard() {
-        navigator.clipboard.writeText(props.text);
-        setIsCopied(true);
-    }
-
-    function getButtonText(): string {
-        return isCopied ? "Copied" :  "Copy";
+    function updateValue(event: FormEvent) {
+        if(disabled) return
+        props.setValue!((event.target as HTMLInputElement).value)
     }
 
     return (
-        <WrapperStyled> 
-            <TextFieldStyled value={props.text} label={props.label} variant="filled"/>
-
-            {!!props.isCopyable && <>
-                <UIButton 
-                    variant="outlined" 
-                    text={getButtonText()} 
-                    onClick={copyToClipboard} 
-                    disabled={isCopied}
-                    />
-            </>}
-
-        </WrapperStyled>
+        <TextFieldStyled 
+        value={props.value} 
+        label={props.label}
+        disabled={disabled}
+        sx={{
+            width: props.width || '100%',
+        }}
+        InputProps={{
+            endAdornment: props.isCopyable ? <UiCopyButton text={props.value}/> : undefined,
+        }}
+        onChange={updateValue}
+        />
     )
 }
 
-const WrapperStyled = styled.div`
-    height: 100%;
-`
-
 const TextFieldStyled = styled(TextField)`
-    width: 90%;
-`
+    color: black;
+    `

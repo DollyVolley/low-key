@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import { ChannelDetails } from '@/pages/Channel/ChannelDetails';
+import { ChannelDetails } from '@/pages/ChannelDetails/ChannelDetails';
 import { CreateChannel } from '@/pages/Channel/CreateChannel';
 import { JoinChannel } from '@/pages/Channel/JoinChannel';
 

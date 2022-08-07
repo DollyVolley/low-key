@@ -9,8 +9,8 @@ export interface MessageServiceConfig {
 export interface ChatMessage {
     timestamp: number,
     isOwn: boolean,
-    content: string
-    msgId?: string
+    content: string,
+    msgId?: string,
 }
 
 export enum ClientType {
