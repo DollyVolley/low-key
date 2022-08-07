@@ -12,8 +12,6 @@ export const ChatHeader: FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const description = useRecoilValue(currentChannelDescriptionSelector)
-    const [showDrawer, setShowDrawer] = useRecoilState(showDrawerAtom)
-
 
     function onTitleClick(): void {
         if(location.pathname.includes("chat")) {

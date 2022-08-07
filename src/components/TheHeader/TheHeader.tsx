@@ -27,6 +27,7 @@ const HeaderWrapperStyled = styled.div`
     display: flex;
     height: 80px;
     line-height: 80px;
+    border-bottom: 2px solid #f0f0f0;
 `
 
 const MenuItemStyled = styled(Menu)`
