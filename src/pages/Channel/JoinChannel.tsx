@@ -1,15 +1,14 @@
 import React, {FC, useEffect, useState} from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
 import styled from "styled-components";
 import { UIButton } from '@/components/ui/button/UIButton';
-import { MessageService } from '@/logic/message-service';
-import { currentChannelSelector } from '@/store/channels/getters/currentChannel';
 import { UITextField } from '@/components/ui/text-field/UITextField';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
+import { useChatManager } from '@/hooks/useContact';
 
 export const JoinChannel: FC = () => {
-    const setChannel = useSetRecoilState(currentChannelSelector)
+    const {joinChat} = useChatManager()
+
     const navigate = useNavigate()
     const {annLink} = useParams()
 
@@ -23,13 +22,17 @@ export const JoinChannel: FC = () => {
     }, [])
 
 
-    async function onJoin() {
+    async function onJoin() {        
         if(link === '') return
         setLoading(true)
-        const channel = await MessageService.joinChannel(name, link)
-    
-        setChannel(channel)
-        navigate(`/channel/id/${channel.channelID}`)   
+        try {
+            const chatID = await joinChat(name, link)
+            navigate(`/channel/id/${chatID}`)  
+        } catch (error) {
+            alert((error as any).message)
+        } finally {
+            setLoading(false)
+        }
     }
 
     function isButtonDisabled() {

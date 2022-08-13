@@ -5,7 +5,7 @@ import { AppRoutes } from '@/routing';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { SideBar } from '@/components/SideBar/SideBar';
 import styled from 'styled-components';
-import { loadStreams } from './logic/message-service/MessageService';
+import { loadStreams } from './logic/streams-service/StreamsService';
 import { isStreamsLoadedAtom } from './store/app';
 import { SwipeableDrawer } from '@mui/material';
 import { showDrawerAtom } from './store/app/drawer/showDrawer';

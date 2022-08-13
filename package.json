@@ -1,7 +1,14 @@
 {
+  "name": "low-key",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "bodywithoutorgans"
+  },
   "scripts": {
     "build": "webpack --stats-children",
-    "serve": "webpack-dev-server --open"
+    "serve": "webpack-dev-server --open",
+    "ship": "./scripts/docker-build-and-push.sh "
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",

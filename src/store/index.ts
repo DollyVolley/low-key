@@ -1,2 +1,3 @@
 export * from './account'
-export * from './channels'
+export * from './chat'
+export * from './app'

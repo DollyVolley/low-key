@@ -1,20 +1,19 @@
-import { ActiveChannel  } from "@/logic/message-service";
-import { ChannelDescription } from "@/types/channel";
+import { Chat, ChatData, ChatDescription } from "@/types/chat";
 
-export function describeChannel(channel: ActiveChannel): ChannelDescription {
+export function describeChannel(chat: Chat): ChatDescription {
     let lastMessage = undefined
     let lastChange = Date.now()
 
-    if(channel.messages.length) {
-        lastMessage = channel.messages[channel.messages.length - 1]
+    if(chat.data.messages.length) {
+        lastMessage = chat.data.messages[chat.data.messages.length - 1]
         lastChange = lastMessage.timestamp
     }
 
     return {
-        name: channel.name,
-        channelID: channel.channelID,
+        name: chat.data.name,
+        chatID: chat.id,
         lastMessage,
         lastChange,
-        started: !!channel.links.lastMessage 
+        started: !!chat.client.links.lastMessage 
     }
 }

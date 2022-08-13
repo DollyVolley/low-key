@@ -1,32 +1,32 @@
-import { ChannelDescription as ChannelDescriptor } from "@/types/channel";
 import React,{FC} from "react";
 import styled from "styled-components";
-import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useRecoilState } from "recoil";
-import { currentChannelIDAtom } from "@/store/channels/state/currentChannelID";
 import { useNavigate } from "react-router-dom";
 import { abbreviateText } from "@/utils/app/abbreviateText";
 import { getFormattedDateTime } from "@/utils/app/getFormattedTime";
+import { currentChatIDAtom } from "@/store/chat";
+import { ChatDescription } from "@/types/chat";
 
 
-export const ChannelCard: FC<{description: ChannelDescriptor}> = ({description}) => {
-    const [currentChannelID, setCurrentChannelID] = useRecoilState(currentChannelIDAtom);
+export const ChannelCard: FC<{description: ChatDescription}> = ({description}) => {
+    const [currentChannelID, setCurrentChannelID] = useRecoilState(currentChatIDAtom);
     const navigate = useNavigate()  
 
 
     function selectContact() {
-        setCurrentChannelID(description.channelID)
+        setCurrentChannelID(description.chatID)
         selectChannelView()
     }
 
     function selectChannelView(): void {
+        console.log(description)
         if(description.started) {
             navigate('/chat')
         } else {
-            navigate(`/channel/id/${description!.channelID}`)
+            navigate(`/channel/id/${description!.chatID}`)
         }
     }
 
@@ -46,7 +46,7 @@ export const ChannelCard: FC<{description: ChannelDescriptor}> = ({description})
     return (
             <ListItemStyled 
             disablePadding onClick={selectContact}
-            className={`${description.channelID === currentChannelID ? "active" : ""}`}>
+            className={`${description.chatID === currentChannelID ? "active" : ""}`}>
                 <ListItemButton>
                     <ListItemText 
                         primary={description.name} 

@@ -1,15 +1,14 @@
-import { currentChannelDescriptionSelector } from '@/store/channelDescriptions';
 import React, {FC, useEffect, useState} from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import styled from "styled-components";
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import { showDrawerAtom } from '@/store/app/drawer/showDrawer';
+import { currentChatDescriptionSelector } from '@/store/chat';
 
 export const ManageChatHeader: FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const description = useRecoilValue(currentChannelDescriptionSelector)
+    const description = useRecoilValue(currentChatDescriptionSelector)
 
     const [routeName, setRouteName] = useState('')
 

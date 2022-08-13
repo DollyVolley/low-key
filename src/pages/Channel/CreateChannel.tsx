@@ -1,40 +1,27 @@
-import React, {FC, FormEvent, useState} from 'react';
+import React, {FC, useState} from 'react';
 import styled from "styled-components";
 
-import { MessageService } from '@/logic/message-service';
 import { useNavigate } from 'react-router-dom';
 import { UIButton } from '@/components/ui/button/UIButton';
-import { useSetRecoilState } from 'recoil';
-import { currentChannelSelector } from '@/store';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
 import { TextField } from '@mui/material';
 import { UITextField } from '@/components/ui/text-field/UITextField';
+import { useChatManager } from '@/hooks/useContact';
 
 
 export const CreateChannel: FC = () => {
-    const setChannel = useSetRecoilState(currentChannelSelector)
+    const {createChat} = useChatManager()
     const navigate = useNavigate()
 
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
 
-    function updateName(event: FormEvent): void {
-        const value = (event.target as HTMLTextAreaElement).value
-        if(value[value.length - 1] === "\n") {
-            onCreate()
-        } else {
-            setName(value)
-        }
-    }
-
 
     async function onCreate() {
         if(name === '') return
         setLoading(true)
-        const channel = await MessageService.createChannel(name)
-    
-        setChannel(channel)
-        navigate(`/channel/id/${channel.channelID}`)   
+        const chatID = await createChat(name)
+        navigate(`/channel/id/${chatID}`)   
     }
 
     return ( 
