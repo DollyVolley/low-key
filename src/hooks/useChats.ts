@@ -1,7 +1,8 @@
 import { StreamsService } from "@/logic/streams-service";
+import { currentChatIDAtom } from "@/store";
 import { chatSelectorFamily } from "@/store/chat/getters/chat";
 import { Chat, ChatMessage } from "@/types/chat";
-import { useRecoilCallback } from "recoil"
+import { useRecoilCallback, useRecoilState, useSetRecoilState } from "recoil"
 
 /* Notice
     As streams needs to be treated as singleton, this hook must always be used in order to
@@ -16,6 +17,7 @@ export function useChats():{
     syncMessages: (chat: Chat) => Promise<void>,
     checkChatStarted: (chat: Chat) => Promise<boolean>,
 }{
+    const [currentChannelID, setCurrentChannelID] = useRecoilState(currentChatIDAtom)
     const setChannel = useRecoilCallback(
         ({ set }) =>
           (chat: Chat) => {
@@ -32,8 +34,11 @@ export function useChats():{
             data: {
                 name,
                 messages: [],
+                isNewMessage: false,
             }
         })
+
+        setCurrentChannelID(client.id)
 
         return client.id
     }
@@ -46,8 +51,11 @@ export function useChats():{
             data: {
                 name,
                 messages: [],
+                isNewMessage: false,
             }
         })
+
+        setCurrentChannelID(client.id)
 
         return client.id
     }
@@ -80,6 +88,7 @@ export function useChats():{
         if(response.messages.length === 0) return
 
         const messages = [...chat.data.messages, ...response.messages]
+        const isUnseenMessage = currentChannelID !== chat.id
 
         setChannel({
             ...chat,
@@ -87,6 +96,7 @@ export function useChats():{
             data: {
                 ...chat.data,
                 messages,
+                isNewMessage: isUnseenMessage
             }
         })
     }

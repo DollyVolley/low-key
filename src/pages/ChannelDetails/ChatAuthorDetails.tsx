@@ -5,7 +5,7 @@ import { UIButton } from '@/components/ui/button/UIButton';
 import { UITextField } from '@/components/ui/text-field/UITextField';
 import { useRecoilValue } from 'recoil';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
-import { useChatManager } from '@/hooks/useContact';
+import { useChatManager } from '@/hooks/useChatManager';
 import { useChat } from '@/hooks/useChat';
 import { currentChatIDAtom } from '@/store/chat';
 

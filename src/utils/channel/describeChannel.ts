@@ -14,6 +14,7 @@ export function describeChannel(chat: Chat): ChatDescription {
         chatID: chat.id,
         lastMessage,
         lastChange,
-        started: !!chat.client.links.lastMessage 
+        started: !!chat.client.links.lastMessage,
+        isNewMessage: chat.data.isNewMessage,
     }
 }

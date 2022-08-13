@@ -9,7 +9,7 @@ export const accountAtom = atom<Account>({
     default: {
         name: "New Account",
         seed: generateSeed(81),
-        channelDescriptions: []
+        chatDescriptions: []
     },
     effects_UNSTABLE: [
         loadAndPersistCacheEffect

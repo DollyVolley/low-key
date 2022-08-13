@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { UIButton } from '@/components/ui/button/UIButton';
 import { UITextField } from '@/components/ui/text-field/UITextField';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
-import { useChatManager } from '@/hooks/useContact';
+import { useChatManager } from '@/hooks/useChatManager';
 
 export const JoinChannel: FC = () => {
     const {joinChat} = useChatManager()

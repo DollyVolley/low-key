@@ -4,9 +4,8 @@ import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import { UIButton } from '@/components/ui/button/UIButton';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
-import { TextField } from '@mui/material';
 import { UITextField } from '@/components/ui/text-field/UITextField';
-import { useChatManager } from '@/hooks/useContact';
+import { useChatManager } from '@/hooks/useChatManager';
 
 
 export const CreateChannel: FC = () => {

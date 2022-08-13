@@ -6,11 +6,11 @@ export const chatDescriptionsSelector= selector({
     key: 'chatDescriptionsSelector', 
     get: ({get}) => {
       const account = get(accountAtom);
-      return account.channelDescriptions
+      return account.chatDescriptions
     },
     set: ({get, set}, updatedDescription) => { 
       const description = updatedDescription as ChatDescription[]
       const account = get(accountAtom);
-      set(accountAtom, {...account, channelDescriptions: description})
+      set(accountAtom, {...account, chatDescriptions: description})
     }
  });

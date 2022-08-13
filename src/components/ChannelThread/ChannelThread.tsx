@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const ChannelThread: FC = () => {
     const channelID = useRecoilValue(currentChatIDAtom)
-    const {messages, postMessage: sendMessage} = useChat(channelID)
+    const {messages, postMessage: sendMessage, markMessagesSeen} = useChat(channelID)
     
     const navigate = useNavigate()
     const bottomRef = useRef<HTMLDivElement>(null);
@@ -21,7 +21,11 @@ export const ChannelThread: FC = () => {
 
 
     useEffect(function onChannelChange() { 
-        if(!channelID) navigate('/')
+        if(!channelID) {
+            navigate('/')
+        } else {
+            markMessagesSeen()
+        }
     },[channelID])
  
     async function onMessageSubmit(content: string) {

@@ -10,7 +10,6 @@ export const chatSelectorFamily= selectorFamily<Chat, string>({
       const data = get(chatDataAtomFamily(id))
       const client = get(clientSelectorFamily(id))
       const chat: Chat = {data: data as ChatData, client: client as ActiveClient, id}
-      console.log(chat, 'chatSelectorFamily')
       return chat
     },
     set: (id) => ({set, get}, chat) => {
@@ -23,6 +22,5 @@ export const chatSelectorFamily= selectorFamily<Chat, string>({
       } else {
         set(currentChatDescriptionSelector, describeChannel(chat))
       }
-
     }
  });

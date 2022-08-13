@@ -1,4 +1,4 @@
-import React,{FC} from "react";
+import React,{FC, ReactElement} from "react";
 import styled from "styled-components";
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -9,7 +9,7 @@ import { abbreviateText } from "@/utils/app/abbreviateText";
 import { getFormattedDateTime } from "@/utils/app/getFormattedTime";
 import { currentChatIDAtom } from "@/store/chat";
 import { ChatDescription } from "@/types/chat";
-
+import CircleIcon from '@mui/icons-material/Circle';
 
 export const ChannelCard: FC<{description: ChatDescription}> = ({description}) => {
     const [currentChannelID, setCurrentChannelID] = useRecoilState(currentChatIDAtom);
@@ -22,7 +22,6 @@ export const ChannelCard: FC<{description: ChatDescription}> = ({description}) =
     }
 
     function selectChannelView(): void {
-        console.log(description)
         if(description.started) {
             navigate('/chat')
         } else {
@@ -30,7 +29,7 @@ export const ChannelCard: FC<{description: ChatDescription}> = ({description}) =
         }
     }
 
-    function getSecondaryText(): string {
+    function getSecondaryText(): string{
         const lastChangeTime = getFormattedDateTime(description.lastChange)
 
         let messagePreview = ''
@@ -49,12 +48,27 @@ export const ChannelCard: FC<{description: ChatDescription}> = ({description}) =
             className={`${description.chatID === currentChannelID ? "active" : ""}`}>
                 <ListItemButton>
                     <ListItemText 
-                        primary={description.name} 
+                        primary={<>
+                        <span> {description.name}
+                        {description.isNewMessage? 
+                            <CircleIconStyled 
+                                sx={{
+                                    fontSize: "10pt"
+                                }}
+                                htmlColor="grey"
+                            />
+                            :''} 
+                        </span>
+                        </>} 
                         secondary={getSecondaryText()}/>
                 </ListItemButton>
             </ListItemStyled>
              )
 }
+
+const CircleIconStyled = styled(CircleIcon)`
+    margin-left: 5px;    
+`
 
 const ListItemStyled = styled(ListItem)`
     background-color: rgba(229, 229, 229, 0.8);

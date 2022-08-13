@@ -2,7 +2,7 @@ import { accountAtom } from "@/store/account";
 import { chatDescriptionsSelector, currentChatIDAtom } from "@/store/chat";
 import { Account } from "@/types/account";
 import { ChatDescription } from "@/types/chat";
-import { GetRecoilValue, selector, SetRecoilState } from "recoil";
+import { selector } from "recoil";
 
 
 export const currentChatDescriptionSelector= selector<ChatDescription | null>({
@@ -23,7 +23,7 @@ export const currentChatDescriptionSelector= selector<ChatDescription | null>({
     set(chatDescriptionsSelector, sortedDescriptions)
 
     const account = get(accountAtom) as Account
-    set(accountAtom, {...account, channelDescriptions: updatedDescriptions})
+    set(accountAtom, {...account, chatDescriptions: updatedDescriptions})
   }
 });
 
