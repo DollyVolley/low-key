@@ -1,21 +1,18 @@
-import { currentChannelDescriptionSelector } from '@/store/channelDescriptions';
-import React, {FC, useEffect} from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import React, {FC} from 'react';
+import {  useRecoilValue } from 'recoil';
 import styled from "styled-components";
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useMediaQueries } from '@/hooks/useMediaQueries';
-import { Menu } from '@mui/icons-material';
-import { showDrawerAtom } from '@/store/app/drawer/showDrawer';
+import { currentChatDescriptionSelector } from '@/store/chat';
 
 export const ChatHeader: FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const description = useRecoilValue(currentChannelDescriptionSelector)
+    const description = useRecoilValue(currentChatDescriptionSelector)
 
     function onTitleClick(): void {
         if(location.pathname.includes("chat")) {
-            navigate(`/channel/id/${description!.channelID}`)
+            navigate(`/channel/id/${description!.chatID}`)
         } else {
             navigate("/chat")
         }

@@ -1,2 +1,2 @@
-export * from './isStreamsLoaded'
+export * from './streams/state/isStreamsLoaded'
 export * from './syncIndicator'

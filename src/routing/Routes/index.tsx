@@ -3,7 +3,7 @@ import ChannelLayout from '@/layouts/ChannelLayout';
 import ChatLayout from '@/layouts/ChatLayout';
 import React,{ FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { channelRoutes } from './channelRoutes';
+import { chatRoutes } from './channelRoutes';
 import { homeRoutes } from './homeRoutes';
 import { threadRoutes } from './threadRoutes';
 
@@ -20,7 +20,7 @@ export const AppRoutes: FC = () => {
         </Route>
 
         <Route element={<ChannelLayout />}>
-          {channelRoutes}
+          {chatRoutes}
         </Route>
 
         <Route element={<BaseAppLayout/>}>

@@ -5,15 +5,18 @@ import { AppRoutes } from '@/routing';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { SideBar } from '@/components/SideBar/SideBar';
 import styled from 'styled-components';
-import { loadStreams } from './logic/message-service/MessageService';
+import { loadStreams } from './logic/streams-service/StreamsService';
 import { isStreamsLoadedAtom } from './store/app';
 import { SwipeableDrawer } from '@mui/material';
 import { showDrawerAtom } from './store/app/drawer/showDrawer';
+import { useMessageService } from './hooks';
 
 export const App: FC = () => {
     const setIsStreamsLoaded = useSetRecoilState(isStreamsLoadedAtom)
     const [showDrawer, setShowDrawer] = useRecoilState(showDrawerAtom)
     const {is1200PxOrLess} = useMediaQueries()
+
+    const messageService = useMessageService()
 
 
     useEffect(()=> {

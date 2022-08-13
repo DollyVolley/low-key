@@ -1,69 +1,36 @@
-import React, {FC, useEffect, useRef, useState} from 'react'
+import React, {FC, useEffect, useRef} from 'react'
 import {MessageCard} from "@/components/ChannelThread/components/MessageCard";
 import styled from "styled-components";
-import {ChatMessage} from "@/logic/message-service/types";
 import {MessageInput} from "@/components/ChannelThread/components/MessageInput";
-import { useNavigate } from 'react-router-dom';
-import { MessageService } from '@/logic/message-service';
-import { useMutex } from '@/hooks/utils/useMutex';
 import { makeMessage } from '@/utils/channel';
-import { currentChannelSelector } from '@/store';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { useInterval } from '@/hooks/utils/useInterval';
-import { increaseSyncCountSelector, decreaseSyncCountSelector } from '@/store/app';
+import { currentChatIDAtom } from '@/store/chat';
+import { useRecoilValue } from 'recoil';
 import { useMediaQueries } from '@/hooks/useMediaQueries';
+import { useChat } from '@/hooks/useChat';
+import { ChatMessage } from '@/types/chat';
+import { useNavigate } from 'react-router-dom';
 
 
 export const ChannelThread: FC = () => {
-    const [channel, setChannel] = useRecoilState(currentChannelSelector)
-    const increaseSyncCount = useSetRecoilState(increaseSyncCountSelector)
-    const decreaseSyncCount = useSetRecoilState(decreaseSyncCountSelector)
-
-    const navigate = useNavigate()
-
-    const [messages, setMessages] = useState<ChatMessage[]>([])
-    const {getLock, releaseLock} = useMutex()
+    const channelID = useRecoilValue(currentChatIDAtom)
+    const {messages, postMessage: sendMessage, markMessagesSeen} = useChat(channelID)
     
+    const navigate = useNavigate()
     const bottomRef = useRef<HTMLDivElement>(null);
     const {is1300PxOrLess} = useMediaQueries()
 
 
     useEffect(function onChannelChange() { 
-        if(!channel) {
+        if(!channelID) {
             navigate('/')
-            return
+        } else {
+            markMessagesSeen()
         }
-        setMessages(channel.messages)
-        syncMessages()
-    },[channel])
+    },[channelID])
  
-    useInterval(syncMessages, 5000)
-
-    async function syncMessages() {
-        if(!channel) return
-
-        await getLock()
-        increaseSyncCount()
-        const updatedChannel = await MessageService.fetchMessages(channel)
-        decreaseSyncCount()
-
-        if(channel.channelID === updatedChannel.channelID && 
-            updatedChannel.messages.length > channel.messages.length) {
-                setChannel(updatedChannel)
-        }
-        releaseLock()
-    }
-
     async function onMessageSubmit(content: string) {
         const message = makeMessage(content, true)
-        const updatedMessages = [...messages, message]
-        setMessages(updatedMessages)
-
-        await getLock()
-        
-        const updatedChannel = await MessageService.sendMessage(channel!, message)
-        setChannel(updatedChannel)
-        releaseLock()
+        await sendMessage(message)
     }
 
     useEffect(function scrollToBottom() {
@@ -72,8 +39,7 @@ export const ChannelThread: FC = () => {
 
     return (
     <MessageThreadWrapper >
-        {!!channel && <>
-            <MessagesWrapper>
+        <MessagesWrapper>
                 {messages.map((message: ChatMessage) => {
                     return <MessageWrapper key={message.timestamp}>
                         <MessageCard message={message} isOwnMessage={message.isOwn} />
@@ -82,9 +48,7 @@ export const ChannelThread: FC = () => {
                 <div ref={bottomRef} />
             </MessagesWrapper>
 
-            <MessageInputStyled submitMessage={onMessageSubmit}/>
-            </>
-        }
+        <MessageInputStyled submitMessage={onMessageSubmit}/>
     </MessageThreadWrapper>
     )
 }

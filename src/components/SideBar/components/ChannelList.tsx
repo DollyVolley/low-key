@@ -1,20 +1,20 @@
-import { ChannelDescription as ChannelDescriptor } from "@/types/channel";
 import React,{FC} from "react";
 import styled from "styled-components";
 import List from '@mui/material/List';
 import { useRecoilValue } from "recoil";
-import { channelDescriptionsSelector } from "@/store/channelDescriptions/state/channelDescriptions";
 import { ChannelCard } from "./ChannelCard";
+import { chatDescriptionsSelector } from "@/store/chat";
+import { ChatDescription } from "@/types/chat";
 
 export const ChannelList: FC = () => {
-    const channelDescriptions = useRecoilValue(channelDescriptionsSelector)
+    const chatDescriptions = useRecoilValue(chatDescriptionsSelector)
 
     return (
     <ContactWrapper>
         <List>
-            {channelDescriptions.length !== 0 && channelDescriptions.map((description: ChannelDescriptor) => {
+            {chatDescriptions.length !== 0 && chatDescriptions.map((description: ChatDescription) => {
              return <ChannelCard 
-                        key={description.channelID} 
+                        key={description.chatID} 
                         description={description} 
                         />
             })}

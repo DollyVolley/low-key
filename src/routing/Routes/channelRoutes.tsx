@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 
-import { ChannelDetails } from '@/pages/ChannelDetails/ChannelDetails';
+import { ChatDetails } from '@/pages/ChannelDetails/ChatDetails';
 import { CreateChannel } from '@/pages/Channel/CreateChannel';
 import { JoinChannel } from '@/pages/Channel/JoinChannel';
 
 
-export const channelRoutes = (
+export const chatRoutes = (
   <Route path="channel">
     <Route path="create" element={<CreateChannel />} />
     <Route path="join">
@@ -14,8 +14,8 @@ export const channelRoutes = (
       <Route path="accept/:announcementLink" element={<JoinChannel />} />
     </Route>
     <Route path="id/:channelID">
-      <Route index element={<ChannelDetails />} />
-      <Route path="accept/:subscriptionLink" element={<ChannelDetails />} />
+      <Route index element={<ChatDetails />} />
+      <Route path="accept/:subscriptionLink" element={<ChatDetails />} />
     </Route>
     <Route path="*" element={<div>Hey Ho kleiner Stern</div>} />
   </Route>

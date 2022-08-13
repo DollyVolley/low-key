@@ -1,9 +1,7 @@
 import React,{FC} from 'react'
 import styled from 'styled-components'
-
 import DoneIcon from '@mui/icons-material/Done';
-
-import {ChatMessage} from "@/logic/message-service/types";
+import {ChatMessage} from "@/types/chat";
 import {getFormattedDateTime} from "@/utils/app/getFormattedTime";
 import { getExplorerURL } from '@/utils/message/getExplorerURL';
 import { CircularProgress, Paper } from '@mui/material';

@@ -1,6 +1,6 @@
+import { ArchiveClient } from '@/logic/streams-service';
 import AbstractModelCache from '../AbstractModelCache';
 import {StorageType} from '../types';
-import {ArchiveChannel, ActiveChannel} from "../../message-service/types";
 
 const MODEL_KEY = 'CHAT_CONTACT';
 
@@ -17,22 +17,21 @@ class ChannelCache extends AbstractModelCache {
     return `${this.modelKey}-${channelAddress}`
   }
 
-  get(channelAddress: string): ArchiveChannel | null {
-    const contactsSerialized = this.storage.getItem(this.getChatModelKey(channelAddress));
+  get(chatId: string): ArchiveClient | null {
+    const contactsSerialized = this.storage.getItem(this.getChatModelKey(chatId));
 
     if (!contactsSerialized) return null;
 
     const contact = JSON.parse(contactsSerialized);
-    return contact as ArchiveChannel;
+    return contact as ArchiveClient;
   }
 
-  set(channel: ArchiveChannel): void {
-    if(!channel) return
-    this.storage.setItem(this.getChatModelKey(channel.channelID), JSON.stringify(channel));
+  set(client: ArchiveClient): void {
+    this.storage.setItem(this.getChatModelKey(client.id), JSON.stringify(client));
   }
 
-  remove(channelId: string): void {
-    this.storage.removeItem(this.getChatModelKey(channelId));
+  remove(chatID: string): void {
+    this.storage.removeItem(this.getChatModelKey(chatID));
   }
 }
 
