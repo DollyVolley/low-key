@@ -1,3 +1,4 @@
+// @ts-nocheck
 import mitt from 'mitt';
 
 export interface EventBus<T> {
@@ -17,13 +18,11 @@ export function makeEventBus<T>(): EventBus<T> {
     },
     subscribe(eventName, callbackFunc) {
       if (typeof eventName === 'string') {
-        /* @ts-ignore */
         emitter.on(eventName, callbackFunc);
       } 
     },
     unsubscribe(eventName, callbackFunc) {
       if (typeof eventName === 'string') {
-        /* @ts-ignore */
         emitter.off(eventName, callbackFunc);
       }
     },

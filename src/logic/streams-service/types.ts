@@ -29,7 +29,7 @@ export interface MessageServiceConfig {
 }
 
 export interface ActiveClient extends BaseClient {
-    streamsClient: StreamsActor | null,
+    streamsClient: StreamsActor 
 }
 
 export interface ArchiveClient extends BaseClient {

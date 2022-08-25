@@ -1,6 +1,6 @@
 import { ChatMessage } from "@/types/chat";
 import { makeEventBus } from "../event-bus";
-import { loadStreams, StreamsLibraryWrapper } from "./StreamsWrapper";
+import { loadStreams, StreamsLibraryWrapper } from "./StreamsLibraryWrapper";
 import { StreamsResponse, ActionQueue, ActiveClient, StreamsAction, ArchiveClient, MessageResponse } from "./types";
 
 export class StreamsService {
@@ -19,6 +19,8 @@ export class StreamsService {
             }
         )
 
+        StreamsService.progressQueue(result.client)
+
         return result.client
     }
 
@@ -30,31 +32,37 @@ export class StreamsService {
             }
         )
 
+        StreamsService.progressQueue(result.client)
+
         return result.client
     }
 
-    public static async sendMessage(client: ActiveClient, message: ChatMessage): Promise<MessageResponse> {
+    public static async sendMessage(client: ActiveClient, message: ChatMessage): Promise<ActiveClient> {
         const result = await StreamsService.addActionToQueue(
             client,
             async (client: ActiveClient, id: string) => {
                 return StreamsLibraryWrapper.sendMessage(id, client, message)}
         )
 
-        return {
-            client: result.client,
-            messages: result.messages || []
-        }
+        StreamsService.progressQueue(result.client)
+
+        return result.client
     }
 
-    public static async fetchMessages(client: ActiveClient): Promise<ActiveClient> {
+    public static async fetchMessages(client: ActiveClient): Promise<MessageResponse> {
         const result = await StreamsService.addActionToQueue(
             client,
             async (client: ActiveClient, id: string) => {
                 return StreamsLibraryWrapper.fetchMessages(id, client)}
         )
 
-        return result.client
+        StreamsService.progressQueue(result.client)
+
+        return {
+            client: result.client,
+            messages: result.messages || []
     }
+        }
 
     public static async exportClient(client: ActiveClient, password: string): Promise<ArchiveClient> {
         const result = await StreamsService.addActionToQueue(
@@ -63,11 +71,13 @@ export class StreamsService {
                 return StreamsLibraryWrapper.exportClient(id, client, password)
             }
         )
+        
+        StreamsService.progressQueue(result.client)
 
         return result.exportedClient!
     }
 
-    // Simple Proxies
+    // Simple Proxies as no ActiveClient is passed as parameter
 
     public static async createChat(): Promise<ActiveClient> {
         return StreamsLibraryWrapper.createChat()
@@ -118,6 +128,4 @@ export class StreamsService {
             this.progressQueue(result.client)
         }
     }
-
-
 }

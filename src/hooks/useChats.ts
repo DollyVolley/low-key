@@ -2,22 +2,19 @@ import { StreamsService } from "@/logic/streams-service";
 import { currentChatIDAtom } from "@/store";
 import { chatSelectorFamily } from "@/store/chat/getters/chat";
 import { Chat, ChatMessage } from "@/types/chat";
-import { useRecoilCallback, useRecoilState, useSetRecoilState } from "recoil"
+import { useRecoilCallback, useRecoilState } from "recoil"
 
-/* Notice
-    As streams needs to be treated as singleton, this hook must always be used in order to
-    avoid crashing due to multiple borrows 
-    Streams was written in rust, ownership principle also applies here
-*/
+
 export function useChats():{
     createChat: (name: string) => Promise<string>,
     joinChat: (name: string, announcementLink: string) => Promise<string>,
     startChat: (chat: Chat, subsctionLink: string) => Promise<void>,
     sendMessage: (chat: Chat, message: ChatMessage) => Promise<void>,
     syncMessages: (chat: Chat) => Promise<void>,
-    checkChatStarted: (chat: Chat) => Promise<boolean>,
-}{
+    checkChatStarted: (chat: Chat) => Promise<void>,
+}{    
     const [currentChannelID, setCurrentChannelID] = useRecoilState(currentChatIDAtom)
+
     const setChannel = useRecoilCallback(
         ({ set }) =>
           (chat: Chat) => {
@@ -62,35 +59,40 @@ export function useChats():{
 
     async function startChat(chat: Chat, subscriptionLink: string): Promise<void> {
         const client = await StreamsService.startChat(chat.client, subscriptionLink)
-
-        setChannel({
+        const updatedChat = {
             ...chat,
             client,
-        })
+        }
+        setChannel(updatedChat)
     }
     
     async function sendMessage(chat: Chat , message: ChatMessage): Promise<void> {
-        const response = await StreamsService.sendMessage(chat.client, message)
-        const messages = [...chat.data.messages, ...response.messages]
+        console.log(`Send ${chat.id}`)
+        const client = await StreamsService.sendMessage(chat.client, message)
+        const messages = [...chat.data.messages, message]
 
-        setChannel({
+        const updatedChat = {
             ...chat,
-            client: response.client,
+            client: client,
             data: {
                 ...chat.data,
                 messages,
             }
-        })
+        }
+
+        setChannel(updatedChat)
     }
 
     async function syncMessages(chat: Chat): Promise<void> {
+        console.log(`Sync ${chat.id}`)
+
         const response = await StreamsService.fetchMessages(chat.client)
         if(response.messages.length === 0) return
 
         const messages = [...chat.data.messages, ...response.messages]
         const isUnseenMessage = currentChannelID !== chat.id
 
-        setChannel({
+        const updatedChat = {
             ...chat,
             client: response.client,
             data: {
@@ -98,21 +100,23 @@ export function useChats():{
                 messages,
                 isNewMessage: isUnseenMessage
             }
-        })
+        }
+
+        setChannel(updatedChat)
     }
 
 
-    async function checkChatStarted(chat: Chat): Promise<boolean> {
+    async function checkChatStarted(chat: Chat): Promise<void> {
         const client = await StreamsService.getKeyloadLink(chat.client)
 
-        if(!client.links.lastMessage) return false
+        if(!client.links.lastMessage) return 
 
-        setChannel({
+        const updatedChat = {
             ...chat,
             client,
-        })
+        }
 
-        return true
+        setChannel(updatedChat)
     }
 
     return {

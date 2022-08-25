@@ -5,7 +5,7 @@ import { AppRoutes } from '@/routing';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { SideBar } from '@/components/SideBar/SideBar';
 import styled from 'styled-components';
-import { loadStreams } from './logic/streams-service/StreamsService';
+import {  StreamsService } from './logic/streams-service';
 import { isStreamsLoadedAtom } from './store/app';
 import { SwipeableDrawer } from '@mui/material';
 import { showDrawerAtom } from './store/app/drawer/showDrawer';
@@ -30,7 +30,7 @@ export const App: FC = () => {
 
     // Loads the asyncronously imported stream library used in the message service immediately
     async function preFetchAsyncImport() {
-        await loadStreams()
+        await StreamsService.loadStreams()
         setIsStreamsLoaded(true)
     }
 
