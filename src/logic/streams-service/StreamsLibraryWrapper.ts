@@ -40,13 +40,11 @@ export class StreamsLibraryWrapper  {
         }
     }
 
-    public static async startChat(id: string, client : ActiveClient, subscriptionLink: string): Promise<StreamsResponse> {
-        console.log(client, subscriptionLink)
+    public static async startChat(client : ActiveClient, subscriptionLink: string): Promise<StreamsResponse> {
         await StreamsLibraryWrapper.acceptSubscription(client.streamsClient!.clone() as streamsLib.Author, subscriptionLink)
         const messageLink = await this.sendKeyload(client.streamsClient as streamsLib.Author, client.links.announcement)
 
         return {
-            id,
             client: {
                 ...client,
                 links: {
@@ -58,12 +56,11 @@ export class StreamsLibraryWrapper  {
         }
     }
 
-    public static async getKeyloadLink(id: string, client: ActiveClient): Promise<StreamsResponse> {
+    public static async getKeyloadLink(client: ActiveClient): Promise<StreamsResponse> {
         if(client.clientType === ClientType.AUTHOR) throw new Error("Author can't receive keyload")
         const result = await client.streamsClient!.clone().fetchNextMsg()
 
         return {
-            id,
             client: {
                 ...client,
                 links: {
@@ -75,7 +72,7 @@ export class StreamsLibraryWrapper  {
     }
 
 
-    public static async sendMessage(id: string, client: ActiveClient, message: ChatMessage): Promise<StreamsResponse> {
+    public static async sendMessage(client: ActiveClient, message: ChatMessage): Promise<StreamsResponse> {
         const address = streams.Address.parse(client.links.lastMessage)
         const publicPayload = streams.to_bytes("") 
         const maskedPayload = streams.to_bytes(message.content)
@@ -84,7 +81,6 @@ export class StreamsLibraryWrapper  {
         const lastMessageLink = response.link.toString()
 
         return {
-            id,
             client: {
                 ...client,
                 links: {
@@ -96,7 +92,7 @@ export class StreamsLibraryWrapper  {
         }
     }
 
-    public static async fetchMessages(id: string, client: ActiveClient): Promise<StreamsResponse> {
+    public static async fetchMessages(client: ActiveClient): Promise<StreamsResponse> {
         const msgs: streamsLib.UserResponse[] = await client.streamsClient!.clone().fetchNextMsgs()
 
         let lastLink = client.links.lastMessage
@@ -113,7 +109,6 @@ export class StreamsLibraryWrapper  {
         })
 
         return {
-            id,
             client: {
                 ...client,
                 links: {
@@ -145,12 +140,11 @@ export class StreamsLibraryWrapper  {
         
     }
 
-    public static exportClient(id: string, activeClient: ActiveClient, password: string): StreamsResponse {
+    public static async exportClient(activeClient: ActiveClient, password: string): Promise<StreamsResponse> {
         const encryptedClient = activeClient.streamsClient!.clone().export(password)
         const encryptedClientB64 = Buffer.from(encryptedClient).toString('base64');
                 
         return {
-            id,
             client: activeClient,
             exportedClient: {
                 ...activeClient,

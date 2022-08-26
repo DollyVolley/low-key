@@ -1,8 +1,7 @@
 import { ClientLinks } from "@/logic/streams-service"
-import { chatSelectorFamily } from "@/store/chat/getters/chat"
-import { ChatMessage } from "@/types/chat"
+import { MOCK_CHAT } from "@/mock/constants"
+import { Chat, ChatMessage } from "@/types/chat"
 import { useEffect, useState } from "react"
-import { useRecoilState } from "recoil"
 import { useChats } from "./useChats"
 
 export function useChat(chatID: string):{
@@ -12,30 +11,35 @@ export function useChat(chatID: string):{
     postMessage: (message: ChatMessage) => Promise<void>,
     markMessagesSeen: () => void,
 } {
-    const [chat, setChat] = useRecoilState(chatSelectorFamily(chatID))
+
+    // @todo: get global chat via chatID
+    const chat = MOCK_CHAT
 
     const {sendMessage } = useChats()
 
     const [messages, setMessages] = useState<ChatMessage[]>([])
 
     useEffect(()=> {
+        // @todo get all messages from global store
         setMessages(chat.data?.messages || [])
     }, [chat])
 
 
     async function postMessage(message: ChatMessage): Promise<void> {
         setMessages([...messages, message])
+        // @todo get all messages from global store
+
         await sendMessage(chat, message)
     }
 
     function markMessagesSeen(): void {
-        setChat({
+        const updatedChat = {
             ...chat, 
             data: {
                 ...chat.data!,
                 isNewMessage: false
             }
-        })
+        }
     }
 
     return {

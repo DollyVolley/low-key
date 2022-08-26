@@ -1,13 +1,12 @@
 import React,{FC} from "react";
 import styled from "styled-components";
 import List from '@mui/material/List';
-import { useRecoilValue } from "recoil";
 import { ChannelCard } from "./ChannelCard";
-import { chatDescriptionsSelector } from "@/store/chat";
 import { ChatDescription } from "@/types/chat";
+import { MOCK_CHAT_DESCRIPTIONS } from "@/mock/constants";
 
 export const ChannelList: FC = () => {
-    const chatDescriptions = useRecoilValue(chatDescriptionsSelector)
+    const chatDescriptions = MOCK_CHAT_DESCRIPTIONS
 
     return (
     <ContactWrapper>

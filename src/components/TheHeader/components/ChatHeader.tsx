@@ -3,12 +3,14 @@ import {  useRecoilValue } from 'recoil';
 import styled from "styled-components";
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import { currentChatDescriptionSelector } from '@/store/chat';
+import { MOCK_CHAT_DESCRIPTIONS } from '@/mock/constants';
 
 export const ChatHeader: FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const description = useRecoilValue(currentChatDescriptionSelector)
+
+    // @ todo: current chat description id should be used here
+    const description = MOCK_CHAT_DESCRIPTIONS[0]
 
     function onTitleClick(): void {
         if(location.pathname.includes("chat")) {

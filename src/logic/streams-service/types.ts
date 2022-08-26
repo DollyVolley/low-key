@@ -3,7 +3,7 @@ import streamsLib from './lib/streams'
 
 export type ActionQueue = {[key in string]: StreamsQueueRequest[]}
 
-export type StreamsAction = (client: ActiveClient, id: string) => Promise<StreamsResponse>
+export type StreamsAction = (client: ActiveClient) => Promise<StreamsResponse>
 
 export interface StreamsQueueRequest {
     id: string,
@@ -11,7 +11,6 @@ export interface StreamsQueueRequest {
 }
 
 export interface StreamsResponse {
-    id: string,
     client: ActiveClient,
     exportedClient?: ArchiveClient,
     messages?: ChatMessage[]

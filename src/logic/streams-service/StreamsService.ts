@@ -14,12 +14,10 @@ export class StreamsService {
     public static async startChat(client : ActiveClient, subscriptionLink: string): Promise<ActiveClient> {
         const result = await StreamsService.addActionToQueue(
             client,
-            async (client: ActiveClient, id: string) => {
-                return StreamsLibraryWrapper.startChat(id, client, subscriptionLink)
+            async (client: ActiveClient) => {
+                return StreamsLibraryWrapper.startChat(client, subscriptionLink)
             }
         )
-
-        StreamsService.progressQueue(result.client)
 
         return result.client
     }
@@ -27,12 +25,10 @@ export class StreamsService {
     public static async getKeyloadLink(client: ActiveClient): Promise<ActiveClient> {
         const result = await StreamsService.addActionToQueue(
             client,
-            async (client: ActiveClient, id: string) => {
-                return StreamsLibraryWrapper.getKeyloadLink(id, client)
+            async (client: ActiveClient) => {
+                return StreamsLibraryWrapper.getKeyloadLink(client)
             }
         )
-
-        StreamsService.progressQueue(result.client)
 
         return result.client
     }
@@ -40,11 +36,9 @@ export class StreamsService {
     public static async sendMessage(client: ActiveClient, message: ChatMessage): Promise<ActiveClient> {
         const result = await StreamsService.addActionToQueue(
             client,
-            async (client: ActiveClient, id: string) => {
-                return StreamsLibraryWrapper.sendMessage(id, client, message)}
+            async (client: ActiveClient) => {
+                return StreamsLibraryWrapper.sendMessage(client, message)}
         )
-
-        StreamsService.progressQueue(result.client)
 
         return result.client
     }
@@ -52,11 +46,9 @@ export class StreamsService {
     public static async fetchMessages(client: ActiveClient): Promise<MessageResponse> {
         const result = await StreamsService.addActionToQueue(
             client,
-            async (client: ActiveClient, id: string) => {
-                return StreamsLibraryWrapper.fetchMessages(id, client)}
+            async (client: ActiveClient) => {
+                return StreamsLibraryWrapper.fetchMessages(client)}
         )
-
-        StreamsService.progressQueue(result.client)
 
         return {
             client: result.client,
@@ -67,13 +59,11 @@ export class StreamsService {
     public static async exportClient(client: ActiveClient, password: string): Promise<ArchiveClient> {
         const result = await StreamsService.addActionToQueue(
             client,
-            async (client: ActiveClient, id: string) => {
-                return StreamsLibraryWrapper.exportClient(id, client, password)
+            async (client: ActiveClient) => {
+                return StreamsLibraryWrapper.exportClient(client, password)
             }
         )
-        
-        StreamsService.progressQueue(result.client)
-
+    
         return result.exportedClient!
     }
 
@@ -91,7 +81,7 @@ export class StreamsService {
         return StreamsLibraryWrapper.importClient(archivedClient, password)
     }
 
-    private static async addActionToQueue(client: ActiveClient ,action: StreamsAction )
+    private static async addActionToQueue(client: ActiveClient, action: StreamsAction )
     : Promise<StreamsResponse> {
         const id = Date.now().toString()
 
@@ -113,15 +103,15 @@ export class StreamsService {
         StreamsService.eventBus.subscribe(id, 
             function resolveResponse ({client, messages, exportedClient}: StreamsResponse){
                 StreamsService.eventBus.unsubscribe(id, resolveResponse)
-                resolve({id, client, messages, exportedClient});
+                resolve({client, messages, exportedClient});
             })
         });
     }
 
     private static async progressQueue(client: ActiveClient): Promise<void> {
         const id = StreamsService.actionQueue[client.id][0].id
-        const result = await StreamsService.actionQueue[client.id][0].action(client, id)
-        this.eventBus.trigger(result.id, result)
+        const result = await StreamsService.actionQueue[client.id][0].action(client)
+        this.eventBus.trigger(id, result)
 
         StreamsService.actionQueue[client.id].shift()
         if(StreamsService.actionQueue[client.id].length > 0) {

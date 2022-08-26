@@ -7,11 +7,12 @@ import { ActiveClient, ClientType } from '@/logic/streams-service';
 import { ChannelSubscriberDetails } from './ChatSubscriberDetails';
 import { ChatAuthorDetails } from './ChatAuthorDetails';
 import { Button } from '@mui/material';
-import { currentChatSelector } from '@/store/chat';
 import { ChatData } from '@/types/chat';
+import { MOCK_CHAT } from '@/mock/constants';
 
 export const ChatDetails: FC = () => {
-    const [chat, setChat] = useRecoilState(currentChatSelector)
+    //@todo: global chat should be used here
+    const [chat, setChat] = useState(MOCK_CHAT)
     const [isLoading, setIsLoading] = useState(true)
     const [hasStarted, setHasStarted] = useState(false)
 

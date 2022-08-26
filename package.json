@@ -46,7 +46,6 @@
     "react-is": "^18.1.0",
     "react-responsive": "^9.0.0-beta.8",
     "react-router-dom": "^6.3.0",
-    "recoil": "^0.7.3",
     "suspend-react": "^0.0.8",
     "typeface-roboto": "^1.1.13"
   }

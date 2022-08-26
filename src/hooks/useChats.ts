@@ -1,6 +1,5 @@
 import { StreamsService } from "@/logic/streams-service";
-import { currentChatIDAtom } from "@/store";
-import { chatSelectorFamily } from "@/store/chat/getters/chat";
+import { MOCK_CURRENT_CHAT_ID } from "@/mock/constants";
 import { Chat, ChatMessage } from "@/types/chat";
 import { useRecoilCallback, useRecoilState } from "recoil"
 
@@ -13,19 +12,11 @@ export function useChats():{
     syncMessages: (chat: Chat) => Promise<void>,
     checkChatStarted: (chat: Chat) => Promise<void>,
 }{    
-    const [currentChannelID, setCurrentChannelID] = useRecoilState(currentChatIDAtom)
 
-    const setChannel = useRecoilCallback(
-        ({ set }) =>
-          (chat: Chat) => {
-            set(chatSelectorFamily(chat.id), chat);
-          },
-        [],
-    )
-
+    // @todo: set global states after each of these actions
     async function createChat(name: string): Promise<string> {
         const client = await StreamsService.createChat()
-        setChannel({
+        const updatedChat = {
             id: client.id,
             client,
             data: {
@@ -33,16 +24,13 @@ export function useChats():{
                 messages: [],
                 isNewMessage: false,
             }
-        })
-
-        setCurrentChannelID(client.id)
-
+        }
         return client.id
     }
 
     async function joinChat(name: string, announcementLink: string): Promise<string> {
         const client = await StreamsService.joinChat(announcementLink)
-        setChannel({
+        const updatedChat = {
             id: client.id,
             client: client,
             data: {
@@ -50,9 +38,7 @@ export function useChats():{
                 messages: [],
                 isNewMessage: false,
             }
-        })
-
-        setCurrentChannelID(client.id)
+        }
 
         return client.id
     }
@@ -63,7 +49,6 @@ export function useChats():{
             ...chat,
             client,
         }
-        setChannel(updatedChat)
     }
     
     async function sendMessage(chat: Chat , message: ChatMessage): Promise<void> {
@@ -79,8 +64,6 @@ export function useChats():{
                 messages,
             }
         }
-
-        setChannel(updatedChat)
     }
 
     async function syncMessages(chat: Chat): Promise<void> {
@@ -90,7 +73,7 @@ export function useChats():{
         if(response.messages.length === 0) return
 
         const messages = [...chat.data.messages, ...response.messages]
-        const isUnseenMessage = currentChannelID !== chat.id
+        const isUnseenMessage =  MOCK_CURRENT_CHAT_ID !== chat.id
 
         const updatedChat = {
             ...chat,
@@ -102,7 +85,6 @@ export function useChats():{
             }
         }
 
-        setChannel(updatedChat)
     }
 
 
@@ -115,8 +97,6 @@ export function useChats():{
             ...chat,
             client,
         }
-
-        setChannel(updatedChat)
     }
 
     return {

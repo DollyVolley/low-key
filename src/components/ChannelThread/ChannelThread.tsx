@@ -3,16 +3,15 @@ import {MessageCard} from "@/components/ChannelThread/components/MessageCard";
 import styled from "styled-components";
 import {MessageInput} from "@/components/ChannelThread/components/MessageInput";
 import { makeMessage } from '@/utils/channel';
-import { currentChatIDAtom } from '@/store/chat';
-import { useRecoilValue } from 'recoil';
 import { useMediaQueries } from '@/hooks/useMediaQueries';
 import { useChat } from '@/hooks/useChat';
 import { ChatMessage } from '@/types/chat';
 import { useNavigate } from 'react-router-dom';
+import { MOCK_CURRENT_CHAT_ID } from '@/mock/constants';
 
 
 export const ChannelThread: FC = () => {
-    const channelID = useRecoilValue(currentChatIDAtom)
+    const channelID = MOCK_CURRENT_CHAT_ID
     const {messages, postMessage: sendMessage, markMessagesSeen} = useChat(channelID)
     
     const navigate = useNavigate()
