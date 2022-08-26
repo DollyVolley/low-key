@@ -1,14 +1,12 @@
 import React, {FC} from 'react';
 import styled from "styled-components";
 import { UITextField } from '@/components/ui/text-field/UITextField';
-import { useRecoilValue } from 'recoil';
-import { currentChatIDAtom } from '@/store/chat';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
 import { useChat } from '@/hooks/useChat';
+import { MOCK_CURRENT_CHAT_ID } from '@/mock/constants';
 
 export const ChannelSubscriberDetails: FC = () => {
-    const currentChannelID = useRecoilValue(currentChatIDAtom);
-    const {name, links} = useChat(currentChannelID!)
+    const {name, links} = useChat(MOCK_CURRENT_CHAT_ID!)
 
     return (
         <>

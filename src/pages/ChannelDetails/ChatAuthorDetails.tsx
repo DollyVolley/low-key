@@ -3,16 +3,14 @@ import styled from "styled-components";
 import { useNavigate, useParams } from 'react-router-dom';
 import { UIButton } from '@/components/ui/button/UIButton';
 import { UITextField } from '@/components/ui/text-field/UITextField';
-import { useRecoilValue } from 'recoil';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
 import { useChatManager } from '@/hooks/useChatManager';
 import { useChat } from '@/hooks/useChat';
-import { currentChatIDAtom } from '@/store/chat';
+import { MOCK_CURRENT_CHAT_ID } from '@/mock/constants';
 
 
 export const ChatAuthorDetails: FC = () => {
-    const currentChatID = useRecoilValue(currentChatIDAtom)
-    const {name, links} = useChat(currentChatID)
+    const {name, links} = useChat(MOCK_CURRENT_CHAT_ID)
     const {startChat} = useChatManager()
 
     const {subLink} = useParams()

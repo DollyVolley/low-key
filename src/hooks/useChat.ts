@@ -1,10 +1,7 @@
 import { ClientLinks } from "@/logic/streams-service"
-import { chatDataAtomFamily } from "@/store"
-import { chatSelectorFamily } from "@/store/chat/getters/chat"
-import { mutexAtomFamily } from "@/store/utils/mutex"
+import { MOCK_CHAT } from "@/mock/constants"
 import { Chat, ChatMessage } from "@/types/chat"
 import { useEffect, useState } from "react"
-import { useRecoilState, useRecoilValue } from "recoil"
 import { useChats } from "./useChats"
 
 export function useChat(chatID: string):{
@@ -14,58 +11,35 @@ export function useChat(chatID: string):{
     postMessage: (message: ChatMessage) => Promise<void>,
     markMessagesSeen: () => void,
 } {
-    const [chat, setChat] = useRecoilState(chatSelectorFamily(chatID))
+
+    // @todo: get global chat via chatID
+    const chat = MOCK_CHAT
 
     const {sendMessage } = useChats()
 
     const [messages, setMessages] = useState<ChatMessage[]>([])
 
-    const [mutex, setMutex] = useRecoilState(mutexAtomFamily(chatID))
-
-    const [messageQueue, setMessageQueue] = useState<ChatMessage[]>([])
-
-
     useEffect(()=> {
+        // @todo get all messages from global store
         setMessages(chat.data?.messages || [])
     }, [chat])
 
-    useEffect(function postMessage(){
-        if(!mutex) {
-            postQueuedMessages()
-        }
-    }, [mutex])
 
     async function postMessage(message: ChatMessage): Promise<void> {
         setMessages([...messages, message])
+        // @todo get all messages from global store
 
-        if(mutex) {
-            setMessageQueue(messages => [...messages, message])
-            return
-        }
-        setMutex(true)
         await sendMessage(chat, message)
-        setMutex(false)
-    }
-
-    async function postQueuedMessages(): Promise<void> {
-        setMutex(true)
-        const queue = [...messageQueue]
-        for(let message of queue) {
-            await sendMessage(chat, message)
-        }
-
-        setMessageQueue([])
-        setMutex(false)
     }
 
     function markMessagesSeen(): void {
-        setChat({
+        const updatedChat = {
             ...chat, 
             data: {
                 ...chat.data!,
                 isNewMessage: false
             }
-        })
+        }
     }
 
     return {

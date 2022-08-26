@@ -27,3 +27,4 @@ export interface ChatDescription {
     isNewMessage: boolean,
     lastMessage?: ChatMessage
 }
+

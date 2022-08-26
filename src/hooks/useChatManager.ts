@@ -1,5 +1,4 @@
-import {  currentChatSelector } from "@/store/chat"
-import { useRecoilValue } from "recoil"
+import { MOCK_CHAT } from "@/mock/constants"
 import { useChats } from "./useChats"
 
 export function useChatManager():{
@@ -9,7 +8,7 @@ export function useChatManager():{
 } {    
     const {createChat, joinChat, startChat: startParticularChat} = useChats()
 
-    const currentChat = useRecoilValue(currentChatSelector)
+    const currentChat = MOCK_CHAT
 
     function startChat(subscriptionLink: string): Promise<void> {
         return startParticularChat(currentChat!, subscriptionLink)
