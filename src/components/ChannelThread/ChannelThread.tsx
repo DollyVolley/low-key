@@ -8,11 +8,12 @@ import { useChat } from '@/hooks/useChat';
 import { ChatMessage } from '@/types/chat';
 import { useNavigate } from 'react-router-dom';
 import { MOCK_CURRENT_CHAT_ID } from '@/mock/constants';
+import { useChatDataContext } from '@/state/chat-data';
 
 
 export const ChannelThread: FC = () => {
-    const channelID = MOCK_CURRENT_CHAT_ID
-    const {messages, postMessage: sendMessage, markMessagesSeen} = useChat(channelID)
+    const {currentChatID} = useChatDataContext()
+    const {messages, postMessage: sendMessage, markMessagesSeen} = useChat(currentChatID)
     
     const navigate = useNavigate()
     const bottomRef = useRef<HTMLDivElement>(null);
@@ -20,12 +21,12 @@ export const ChannelThread: FC = () => {
 
 
     useEffect(function onChannelChange() { 
-        if(!channelID) {
+        if(!currentChatID) {
             navigate('/')
         } else {
             markMessagesSeen()
         }
-    },[channelID])
+    },[currentChatID])
  
     async function onMessageSubmit(content: string) {
         const message = makeMessage(content, true)

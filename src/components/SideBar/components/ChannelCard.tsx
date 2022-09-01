@@ -22,7 +22,7 @@ export const ChannelCard: FC<{description: ChatDescription}> = ({description}) =
     }
 
     function selectChannelView(): void {
-        if(description.started) {
+        if(description.isStarted) {
             navigate('/chat')
         } else {
             navigate(`/channel/id/${description!.chatID}`)
@@ -33,7 +33,7 @@ export const ChannelCard: FC<{description: ChatDescription}> = ({description}) =
         const lastChangeTime = getFormattedDateTime(description.lastChange)
 
         let messagePreview = ''
-        if(!description.started || !description.lastMessage) {
+        if(!description.isStarted || !description.lastMessage) {
             messagePreview = 'Created Channel'
         } else {
             messagePreview = abbreviateText(description.lastMessage.content, 17)

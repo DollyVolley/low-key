@@ -29,7 +29,7 @@ export const MOCK_CHAT_DESCRIPTIONS: ChatDescription[] = [
         name: ":)",
         isNewMessage: false,
         lastChange: Date.now(),
-        started: false,
+        isStarted: false,
         lastMessage: {
             content: ":)",
             timestamp: Date.now(),

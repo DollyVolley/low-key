@@ -25,7 +25,7 @@ export const ManageChatHeader: FC = () => {
 
 
     function onTitleClick(): void {
-        if(description?.started) {
+        if(description?.isStarted) {
             navigate("/chat")
         }
     }
