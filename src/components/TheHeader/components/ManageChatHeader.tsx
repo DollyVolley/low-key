@@ -1,5 +1,4 @@
 import React, {FC, useEffect, useState} from 'react';
-import { useRecoilValue } from 'recoil';
 import styled from "styled-components";
 
 import { useNavigate, useLocation } from 'react-router-dom';

@@ -6,6 +6,8 @@ export const MOCK_CURRENT_CHAT_ID = ":)"
 export const MOCK_CHAT: Chat = {
     id: ":)",
     data: {
+        id: 'uhh',
+        isStarted: true,
         name: ":)",
         messages: [],
         isNewMessage: false,

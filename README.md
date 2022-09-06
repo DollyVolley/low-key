@@ -7,7 +7,7 @@ It consists of a client software for the users and a distributed ledger technolo
 
 ## Stack
 * SPA: React 18
-* State Management: Recoil 
+* State Management: Context 
 * PWA
 * DLT for communication: IOTA
 * DLT adapter (send, interpret and organize data and transactions): IOTA [Streams Channel](https://github.com/iotaledger/streams) (publish/subscribe tool)

@@ -1,8 +1,6 @@
 import { StreamsService } from "@/logic/streams-service";
 import { MOCK_CURRENT_CHAT_ID } from "@/mock/constants";
 import { Chat, ChatMessage } from "@/types/chat";
-import { useRecoilCallback, useRecoilState } from "recoil"
-
 
 export function useChats():{
     createChat: (name: string) => Promise<string>,

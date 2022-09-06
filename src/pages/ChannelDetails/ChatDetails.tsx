@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { ActiveClient, ClientType } from '@/logic/streams-service';
 import { ChannelSubscriberDetails } from './ChatSubscriberDetails';

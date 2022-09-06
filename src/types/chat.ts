@@ -10,6 +10,7 @@ export interface ChatData {
     id: string,
     name: string,
     messages: ChatMessage[],
+    isStarted: boolean,
     isNewMessage: boolean
 }
 
