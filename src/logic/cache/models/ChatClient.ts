@@ -4,7 +4,7 @@ import {StorageType} from '../types';
 
 const MODEL_KEY = 'CHAT_CONTACT';
 
-class ChannelCache extends AbstractModelCache {
+export class ChatClientCache extends AbstractModelCache {
   constructor(id?: string, storageType?: StorageType) {
     super(MODEL_KEY, id, storageType);
   }
@@ -18,12 +18,12 @@ class ChannelCache extends AbstractModelCache {
   }
 
   get(chatId: string): ArchiveClient | null {
-    const contactsSerialized = this.storage.getItem(this.getChatModelKey(chatId));
+    const clientSerialized = this.storage.getItem(this.getChatModelKey(chatId));
 
-    if (!contactsSerialized) return null;
+    if (!clientSerialized) return null;
 
-    const contact = JSON.parse(contactsSerialized);
-    return contact as ArchiveClient;
+    const client = JSON.parse(clientSerialized);
+    return client as ArchiveClient;
   }
 
   set(client: ArchiveClient): void {
@@ -34,5 +34,3 @@ class ChannelCache extends AbstractModelCache {
     this.storage.removeItem(this.getChatModelKey(chatID));
   }
 }
-
-export default ChannelCache;

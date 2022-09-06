@@ -4,7 +4,7 @@ import { Account } from '@/types/account';
 
 const MODEL_KEY = 'CHANNEL_ADDRESSES_CACHE';
 
-class AccountCache extends AbstractModelCache {
+export class AccountCache extends AbstractModelCache {
   constructor(id?: string, storageType?: StorageType) {
     super(MODEL_KEY, id, storageType);
   }
@@ -26,4 +26,3 @@ class AccountCache extends AbstractModelCache {
   }
 }
 
-export default AccountCache;

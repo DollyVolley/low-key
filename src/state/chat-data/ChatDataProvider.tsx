@@ -1,29 +1,28 @@
-import { init } from "@/logic/streams-service/lib/streams/streams";
+import React, { FC, PropsWithChildren, useState, useMemo, useEffect } from "react";
+import { AccountCache, ChatDataCache } from "@/logic/cache";
+import {generateSeed} from "@/logic/streams-service";
 import { Account } from "@/types/account";
 import { ChatData, ChatDescription, ChatMessage } from "@/types/chat";
 import { describeChat } from "@/utils/channel";
-import React, { FC, PropsWithChildren, useState, useMemo, useEffect } from "react";
 import { ChatDataContext } from "./ChatDataContext";
 
 export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }) => {
   const [account, setAccount] = useState<Account>({} as Account)  
   const [currentChatID, setCurrentChatID] = useState("");
-  const [allChatIDs, setAllChatIDs] = useState([])
+  const [allChatIDs, setAllChatIDs] = useState<string[]>([])
   const [chatDataMap, setChatDataMap] = useState<{[key in string]: ChatData}>({})
   const [chatDescriptionMap, setChatDescriptionMap] = useState<{[key in string]: ChatDescription}>({})
   const [isReady, setIsReady] = useState(false)
 
+  const accountCache = new AccountCache()
+  const chatDataCache = new ChatDataCache()
+
+
   useEffect(function init() {
-    initAccount()
+    loadAccount()
+    loadChatData()
     setIsReady(true)
   },[])
-
-  function initAccount(): void {
-    setAccount()
-    setAllChatIDs()
-    setChatDescriptionMap()
-    setChatDataMap()
-  }
 
   const currentChatData = useMemo(() => {
     return chatDataMap[currentChatID]
@@ -40,7 +39,7 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
     })
 
     setChatDescription(chatData)
-    // @todo persist
+    chatDataCache.set(chatData)
   }
 
   function setChatDescription(chatData: ChatData): void {
@@ -49,8 +48,11 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
       [chatData.id]: describeChat(chatData)
     })
 
-    // @todo persist
-  }
+    accountCache.set({
+      ...account,
+      chatDescriptions: Object.values(chatDescriptionMap)
+    })
+  }  
 
   function setMessageSeen(id: string): void {
     setChatData({
@@ -68,6 +70,33 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
       ...chatDataMap[chatID],
       messages: [...chatDataMap[chatID].messages, ...messages]
     })
+  }
+
+  function loadAccount(){
+    let account = accountCache.get()
+    if(!account) {
+      account = {
+        seed: generateSeed(81),
+        chatDescriptions: [],
+        name: 'New User'
+      }
+    }
+
+    setAccount(account)
+    const chatDescriptionMap: Record<string, ChatDescription> = {}
+    account.chatDescriptions.forEach((chatDescription: ChatDescription) => {
+      chatDescriptionMap[chatDescription.chatID] = chatDescription
+    })
+    setChatDescriptionMap(chatDescriptionMap)
+    setAllChatIDs(account.chatDescriptions.map((chatDescription: ChatDescription) => chatDescription.chatID))
+  }
+
+  function loadChatData() {
+    const loadedChatDataMap: Record<string, ChatData> = {}
+    allChatIDs.forEach((chatID: string) => {
+        loadedChatDataMap[chatID] = chatDataCache.get(chatID)!
+    })
+    setChatDataMap(loadedChatDataMap)
   }
 
 
