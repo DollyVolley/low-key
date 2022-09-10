@@ -13,6 +13,7 @@ export function useMessageSyncService(){
     },[clientMap] )
 
     async function syncChats(){
+        console.log(`Syncing: ${isReady}`)
         if(isReady ){
             clients.forEach(client => {                
                 const hasStarted = client.links.lastMessage

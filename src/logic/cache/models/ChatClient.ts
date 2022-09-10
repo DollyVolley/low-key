@@ -2,7 +2,7 @@ import { ArchiveClient } from '@/logic/streams-service';
 import AbstractModelCache from '../AbstractModelCache';
 import {StorageType} from '../types';
 
-const MODEL_KEY = 'CHAT_CONTACT';
+const MODEL_KEY = 'CHAT_CLIENT';
 
 export class ChatClientCache extends AbstractModelCache {
   constructor(id?: string, storageType?: StorageType) {

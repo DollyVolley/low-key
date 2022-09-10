@@ -29,14 +29,18 @@ export const ChatClientProvider: FC<PropsWithChildren<any>> = ({ children }) => 
   async function loadChatClients(){
     setIsReady(false)
     const loadedClients: Record<string, ActiveClient> = {}
+
     const loadingPromise = allChatIDs.map(async (id: string) => {
       const archiveClient = chatClientCache.get(id)
       if(!archiveClient){
         console.error(`Data Corrupted: Did not find client for ${id}.`)
       }
+
       const client = await StreamsService.importClient(archiveClient!, account.seed)
       loadedClients[id] = client
     })
+
+    console.log(loadingPromise)
 
     await Promise.all(loadingPromise)
 

@@ -5,12 +5,13 @@ import { ChatData } from "@/types/chat"
 
 export function useChatManager() {    
     const {setClient, isReady, clientMap} = useChatClientContext()
-    const {setChatData } = useChatDataContext()
+    const {setChatData, setCurrentChatID } = useChatDataContext()
 
     async function createChat(name: string): Promise<string> {
         const updatedClient = await StreamsService.createChat()
         setClient(updatedClient)
         createChatData(name, updatedClient.id)
+        setCurrentChatID(updatedClient.id)
         return updatedClient.id
     }
 
@@ -18,6 +19,9 @@ export function useChatManager() {
         const updatedClient = await StreamsService.joinChat(announcementLink)
         setClient(updatedClient)
         createChatData(name, updatedClient.id)
+
+        setCurrentChatID(updatedClient.id)        
+        return updatedClient.id
     }
 
     async function startChat(chatID: string, subscriptionLink: string) {
@@ -32,7 +36,7 @@ export function useChatManager() {
             id: chatID,
             isStarted: false,
             messages: [],
-            isNewMessage: true,
+            isNewMessage: false,
         }
         setChatData(chatData)
     }

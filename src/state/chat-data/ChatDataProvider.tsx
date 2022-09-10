@@ -36,6 +36,7 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   }, [account])
 
   function setChatData(chatData: ChatData): void {
+    console.log(`set ${chatData.id} with ${chatData.messages.length}`)
     setChatDataMap({
       ...chatDataMap,
       [chatData.id]: chatData,
@@ -53,7 +54,7 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
 
     accountCache.set({
       ...account,
-      chatDescriptions: Object.values(chatDescriptionMap)
+      chatDescriptions: Object.values(chatDescriptionMap).sort((a,b) => b.lastChange - a.lastChange)
     })
   }  
 
@@ -64,9 +65,10 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
     })
   }
 
-  function addMessagesToChat(chatID: string, messages: ChatMessage[]) {
+  function addMessagesToChat(chatID: string, messages: ChatMessage[]) {  
     setChatData({
       ...chatDataMap[chatID],
+      isNewMessage: currentChatID !== chatID,
       messages: [...chatDataMap[chatID].messages, ...messages]
     })
   }

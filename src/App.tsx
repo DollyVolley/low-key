@@ -5,11 +5,14 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { SideBar } from '@/components/SideBar/SideBar';
 import styled from 'styled-components';
 import { SwipeableDrawer } from '@mui/material';
+import { useMessageSyncService } from './hooks';
 
 export const App: FC = () => {
     // @todo get from global (app) state
     const [showDrawer, setShowDrawer] = [false,(x: boolean)=>{}]
     const {is1200PxOrLess} = useMediaQueries()
+
+    const syncDaemon = useMessageSyncService()
 
 
     useEffect(function manageDrawerVisibility() {
