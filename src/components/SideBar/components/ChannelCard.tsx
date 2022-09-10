@@ -8,16 +8,15 @@ import { abbreviateText } from "@/utils/app/abbreviateText";
 import { getFormattedDateTime } from "@/utils/app/getFormattedTime";
 import { ChatDescription } from "@/types/chat";
 import CircleIcon from '@mui/icons-material/Circle';
-import { MOCK_CURRENT_CHAT_ID } from "@/mock/constants";
+import { useChatDataContext } from "@/state/chat-data";
 
 export const ChannelCard: FC<{description: ChatDescription}> = ({description}) => {
-    // @todo: global current chat id should be used here
-    const [currentChannelID, setCurrentChannelID] = useState(MOCK_CURRENT_CHAT_ID)
+    const {currentChatID, setCurrentChatID} = useChatDataContext()
     const navigate = useNavigate()  
 
 
     function selectContact() {
-        setCurrentChannelID(description.chatID)
+        setCurrentChatID(description.chatID)
         selectChannelView()
     }
 
@@ -45,7 +44,7 @@ export const ChannelCard: FC<{description: ChatDescription}> = ({description}) =
     return (
             <ListItemStyled 
             disablePadding onClick={selectContact}
-            className={`${description.chatID === currentChannelID ? "active" : ""}`}>
+            className={`${description.chatID === currentChatID ? "active" : ""}`}>
                 <ListItemButton>
                     <ListItemText 
                         primary={<>

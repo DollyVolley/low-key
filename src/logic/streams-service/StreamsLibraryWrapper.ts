@@ -8,6 +8,7 @@ const NODE_URL = "https://hornet.low-key.io/"
 let streams: any
 
 export async function loadStreams() {
+    if(streams) return
     streams = await instantiateStreams()
     console.log("Streams loaded")
 }

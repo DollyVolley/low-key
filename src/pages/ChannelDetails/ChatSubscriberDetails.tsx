@@ -2,11 +2,10 @@ import React, {FC} from 'react';
 import styled from "styled-components";
 import { UITextField } from '@/components/ui/text-field/UITextField';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
-import { useChat } from '@/hooks/useChat';
-import { MOCK_CURRENT_CHAT_ID } from '@/mock/constants';
+import { useCurrentChat } from '@/hooks/useCurrentChat';
 
 export const ChannelSubscriberDetails: FC = () => {
-    const {name, links} = useChat(MOCK_CURRENT_CHAT_ID!)
+    const {name, links} = useCurrentChat()
 
     return (
         <>
@@ -15,7 +14,7 @@ export const ChannelSubscriberDetails: FC = () => {
                     <TextWrapperStyled>
                         <div>Send the Subscription Link below back to {name}</div>
                     </TextWrapperStyled>
-                    <UITextField label="Subscription Link:" value={links.subscription} isCopyable={true} />
+                    <UITextField label="Subscription Link:" value={links!.subscription} isCopyable={true} />
 
                 </SectionWrapper>
             </UiBoxContainer>

@@ -9,7 +9,6 @@ import { ChatDataContext } from "./ChatDataContext";
 export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }) => {
   const [account, setAccount] = useState<Account>({} as Account)  
   const [currentChatID, setCurrentChatID] = useState("");
-  const [allChatIDs, setAllChatIDs] = useState<string[]>([])
   const [chatDataMap, setChatDataMap] = useState<{[key in string]: ChatData}>({})
   const [chatDescriptionMap, setChatDescriptionMap] = useState<{[key in string]: ChatDescription}>({})
   const [isReady, setIsReady] = useState(false)
@@ -20,7 +19,6 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
 
   useEffect(function init() {
     loadAccount()
-    loadChatData()
     setIsReady(true)
   },[])
 
@@ -29,8 +27,13 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   }, [currentChatID])
 
   const allChatDescriptions = useMemo(() => {
-    return Object.values(chatDescriptionMap)
+    return Object.values(chatDescriptionMap) || []
   }, [chatDescriptionMap])
+
+  const allChatIDs = useMemo(() => {
+    if(!Object.values(account).length) return []
+    return account.chatDescriptions.map((description: ChatDescription) => description.chatID)
+  }, [account])
 
   function setChatData(chatData: ChatData): void {
     setChatDataMap({
@@ -61,10 +64,6 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
     })
   }
 
-  function getChatDataByID(id: string): ChatData {
-    return chatDataMap[id]
-  }
-
   function addMessagesToChat(chatID: string, messages: ChatMessage[]) {
     setChatData({
       ...chatDataMap[chatID],
@@ -80,6 +79,8 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
         chatDescriptions: [],
         name: 'New User'
       }
+
+      accountCache.set(account)
     }
 
     setAccount(account)
@@ -88,17 +89,26 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
       chatDescriptionMap[chatDescription.chatID] = chatDescription
     })
     setChatDescriptionMap(chatDescriptionMap)
-    setAllChatIDs(account.chatDescriptions.map((chatDescription: ChatDescription) => chatDescription.chatID))
+
+    loadChatData(account.chatDescriptions.map(description => description.chatID))
   }
 
-  function loadChatData() {
+  function loadChatData(chatIDs: string[]) {
     const loadedChatDataMap: Record<string, ChatData> = {}
-    allChatIDs.forEach((chatID: string) => {
-        loadedChatDataMap[chatID] = chatDataCache.get(chatID)!
+
+    chatIDs.forEach((id: string) => {
+      loadedChatDataMap[id] = chatDataCache.get(id)!
     })
+
     setChatDataMap(loadedChatDataMap)
   }
 
+  function setChatStarted(chatID: string) {
+    setChatData({
+      ...chatDataMap[chatID],
+      isStarted: true
+    })
+  }
 
   const contextValue = useMemo(
     () => ({
@@ -107,14 +117,14 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
       currentChatID,
       allChatIDs,
       chatDescriptions: allChatDescriptions,
-      getChatDataByID,
       setCurrentChatID,
       addMessagesToChat,
       setMessageSeen,
       setChatData,
+      setChatStarted,
       isReady
     }),
-    [],
+    [account, currentChatID, chatDataMap, chatDescriptionMap, isReady],
   );
 
   return <ChatDataContext.Provider value={contextValue}>{children}</ChatDataContext.Provider>;

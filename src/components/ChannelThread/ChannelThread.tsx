@@ -4,16 +4,15 @@ import styled from "styled-components";
 import {MessageInput} from "@/components/ChannelThread/components/MessageInput";
 import { makeMessage } from '@/utils/channel';
 import { useMediaQueries } from '@/hooks/useMediaQueries';
-import { useChat } from '@/hooks/useChat';
+import { useCurrentChat } from '@/hooks/useCurrentChat';
 import { ChatMessage } from '@/types/chat';
 import { useNavigate } from 'react-router-dom';
-import { MOCK_CURRENT_CHAT_ID } from '@/mock/constants';
 import { useChatDataContext } from '@/state/chat-data';
 
 
 export const ChannelThread: FC = () => {
     const {currentChatID} = useChatDataContext()
-    const {messages, postMessage: sendMessage, markMessagesSeen} = useChat(currentChatID)
+    const {messages, postMessage: sendMessage, markMessagesSeen} = useCurrentChat()
     
     const navigate = useNavigate()
     const bottomRef = useRef<HTMLDivElement>(null);

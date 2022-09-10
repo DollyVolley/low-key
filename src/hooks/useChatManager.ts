@@ -1,23 +1,47 @@
-import { MOCK_CHAT } from "@/mock/constants"
-import { useChats } from "./useChats"
+import { StreamsService } from "@/logic/streams-service"
+import { useChatClientContext } from "@/state/chat-client"
+import { useChatDataContext } from "@/state/chat-data"
+import { ChatData } from "@/types/chat"
 
-export function useChatManager():{
-    createChat: (name: string) => Promise<string>,
-    joinChat: (name: string, announcementLink: string) => Promise<string>,
-    startChat: (subscriptionLink: string) => Promise<void>,
-} {    
-    const {createChat, joinChat, startChat: startParticularChat} = useChats()
+export function useChatManager() {    
+    const {setClient, isReady, clientMap} = useChatClientContext()
+    const {setChatData } = useChatDataContext()
 
-    const currentChat = MOCK_CHAT
+    async function createChat(name: string): Promise<string> {
+        const updatedClient = await StreamsService.createChat()
+        setClient(updatedClient)
+        createChatData(name, updatedClient.id)
+        return updatedClient.id
+    }
 
-    function startChat(subscriptionLink: string): Promise<void> {
-        return startParticularChat(currentChat!, subscriptionLink)
+    async function joinChat(name: string, announcementLink: string) {
+        const updatedClient = await StreamsService.joinChat(announcementLink)
+        setClient(updatedClient)
+        createChatData(name, updatedClient.id)
+    }
+
+    async function startChat(chatID: string, subscriptionLink: string) {
+        const client = clientMap[chatID]
+        const updatedClient = await StreamsService.startChat(client!, subscriptionLink)
+        setClient(updatedClient)
+    }
+
+    function createChatData(name: string, chatID: string) {
+        const chatData: ChatData = {
+            name,
+            id: chatID,
+            isStarted: false,
+            messages: [],
+            isNewMessage: true,
+        }
+        setChatData(chatData)
     }
   
     return {
         createChat,
         joinChat,
         startChat,
+        isReady
     }
 
 }

@@ -2,13 +2,12 @@ import React, {FC, useEffect, useState} from 'react';
 import styled from "styled-components";
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MOCK_CHAT_DESCRIPTIONS } from '@/mock/constants';
+import { useChatDataContext } from '@/state/chat-data';
 
 export const ManageChatHeader: FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    // @ todo: current chat description id should be used here
-    const description = MOCK_CHAT_DESCRIPTIONS[0]
+    const {currentChatData} = useChatDataContext()
     
     const [routeName, setRouteName] = useState('')
 
@@ -24,7 +23,7 @@ export const ManageChatHeader: FC = () => {
 
 
     function onTitleClick(): void {
-        if(description?.isStarted) {
+        if(currentChatData?.isStarted) {
             navigate("/chat")
         }
     }

@@ -2,18 +2,17 @@ import React, {FC} from 'react';
 import styled from "styled-components";
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import { MOCK_CHAT_DESCRIPTIONS } from '@/mock/constants';
+import { useChatDataContext } from '@/state/chat-data';
 
 export const ChatHeader: FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    // @ todo: current chat description id should be used here
-    const description = MOCK_CHAT_DESCRIPTIONS[0]
+    const {currentChatData} = useChatDataContext()
 
     function onTitleClick(): void {
         if(location.pathname.includes("chat")) {
-            navigate(`/channel/id/${description!.chatID}`)
+            navigate(`/channel/id/${currentChatData!.id}`)
         } else {
             navigate("/chat")
         }
@@ -21,7 +20,7 @@ export const ChatHeader: FC = () => {
 
     return (
         <HeaderWrapperStyled>
-            <TitleStyled onClick={onTitleClick}>{description?.name}</TitleStyled>
+            <TitleStyled onClick={onTitleClick}>{currentChatData?.name}</TitleStyled>
         </HeaderWrapperStyled>
     )
 }

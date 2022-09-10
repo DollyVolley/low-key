@@ -1,50 +1,37 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC} from 'react';
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { ActiveClient, ClientType } from '@/logic/streams-service';
+import { ClientType } from '@/logic/streams-service';
 import { ChannelSubscriberDetails } from './ChatSubscriberDetails';
 import { ChatAuthorDetails } from './ChatAuthorDetails';
 import { Button } from '@mui/material';
-import { ChatData } from '@/types/chat';
-import { MOCK_CHAT } from '@/mock/constants';
+import { useCurrentChat } from '@/hooks';
 
 export const ChatDetails: FC = () => {
-    //@todo: global chat should be used here
-    const [chat, setChat] = useState(MOCK_CHAT)
-    const [isLoading, setIsLoading] = useState(true)
-    const [hasStarted, setHasStarted] = useState(false)
-
+    const {name, isStarted, clientType, isClientLoaded } = useCurrentChat()
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if(!chat.client) return
-        setHasStarted(!!chat?.client.links.lastMessage)
-        setHasStarted(false)
-
-    }, [chat])
 
     function goBack() {
-        if(!hasStarted) return
+        if(!isStarted) return
         navigate('/chat')
     }
 
     function onRemoveChannel() {
-        setChat({...chat, client: (null as unknown as ActiveClient), data: (null as unknown as ChatData)})
+        console.log('lol')
         navigate('/')
     }
 
     return (<PageWrapper> 
         
         <FormWrapperStyled>
-        {isLoading && <>
-            <ChannelNameStyled>{chat.data?.name}</ChannelNameStyled>
+        {isClientLoaded && <>
+            <ChannelNameStyled>{name}</ChannelNameStyled>
 
             <ChannelActorWrapper>
-                {!chat.client?.links.lastMessage && <>
-                    {chat.client?.clientType === ClientType.AUTHOR && <ChatAuthorDetails/>}
-                    {chat.client?.clientType === ClientType.SUBSCRIBER && <ChannelSubscriberDetails/>}
-                </>}
+                {clientType === ClientType.AUTHOR && <ChatAuthorDetails/>}
+                {clientType === ClientType.SUBSCRIBER && <ChannelSubscriberDetails/>}
             </ChannelActorWrapper>
 
             <Button  color="error" onClick={onRemoveChannel}>Remove Chat</Button>

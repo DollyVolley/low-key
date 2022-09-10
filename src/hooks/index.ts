@@ -1,4 +1,3 @@
-export * from './useChat'
-export * from './useChatManager'
+export * from './useCurrentChat'
 export * from './useMediaQueries'
-export * from './useMessageService'
+export * from './useMessageSyncService'

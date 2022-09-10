@@ -1,6 +1,6 @@
 import { createContext, FC, PropsWithChildren, useContext, useMemo, useState } from 'react';
 import { ChatDataOption } from './types';
-import {ChatData, ChatDescription} from '@/types/chat'
+import {ChatData, ChatDescription, ChatMessage} from '@/types/chat'
 import { Account } from '@/types/account';
 
 export const ChatDataContext = createContext<ChatDataOption>({
@@ -9,11 +9,10 @@ export const ChatDataContext = createContext<ChatDataOption>({
     currentChatID: "",
     allChatIDs: [],
     chatDescriptions: [],
-    getChatDataByID: (chatID: string) => ({} as ChatData),
     setCurrentChatID: (currentChatID: string) => {},
     setMessageSeen: (chatID: string) => {},
     setChatData: (chatData: ChatData) => {},
-    addMessagesToChat(chatID, messages) {
-    },
-    isReady: false
+    addMessagesToChat: (chatID: string, messages?: ChatMessage[]) => {},
+    isReady: false,
+    setChatStarted: (chatID: string) => {},
 });

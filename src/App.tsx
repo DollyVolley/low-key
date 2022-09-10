@@ -4,33 +4,18 @@ import { AppRoutes } from '@/routing';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { SideBar } from '@/components/SideBar/SideBar';
 import styled from 'styled-components';
-import {  StreamsService } from './logic/streams-service';
 import { SwipeableDrawer } from '@mui/material';
-import { testStreamsToTheBonez } from './streams-test';
 
 export const App: FC = () => {
     // @todo get from global (app) state
-    const setIsStreamsLoaded = (x: boolean)=>{}
     const [showDrawer, setShowDrawer] = [false,(x: boolean)=>{}]
     const {is1200PxOrLess} = useMediaQueries()
 
-    useEffect(()=> {
-        preFetchAsyncImport()
-    }, [])
 
     useEffect(function manageDrawerVisibility() {
         setShowDrawer(!is1200PxOrLess)
 
     }, [is1200PxOrLess])
-
-    // Loads the asyncronously imported stream library used in the message service immediately
-    async function preFetchAsyncImport() {
-        await StreamsService.loadStreams()
-        setIsStreamsLoaded(true)
-
-        testStreamsToTheBonez()
-    }
-
 
     return (
     <ApplicationWrapperStyled>

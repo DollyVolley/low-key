@@ -33,14 +33,17 @@ export class StreamsService {
         return result.client
     }
 
-    public static async sendMessage(client: ActiveClient, message: ChatMessage): Promise<ActiveClient> {
+    public static async sendMessage(client: ActiveClient, message: ChatMessage): Promise<MessageResponse> {
         const result = await StreamsService.addActionToQueue(
             client,
             async (client: ActiveClient) => {
                 return StreamsLibraryWrapper.sendMessage(client, message)}
         )
 
-        return result.client
+        return {
+            client: result.client,
+            messages: result.messages!
+        }
     }
 
     public static async fetchMessages(client: ActiveClient): Promise<MessageResponse> {

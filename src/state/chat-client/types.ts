@@ -1,6 +1,8 @@
 import { ActiveClient } from "@/logic/streams-service";
+import { ChatMessage } from "@/types/chat";
 
 export interface ChatClientOption {
-    getClientByID: (id: string) => Promise<ActiveClient>,
-    setClient: (client: ActiveClient) => Promise<void> 
+    clientMap: Record<string, ActiveClient>,
+    setClient: (client: ActiveClient, messages?: ChatMessage[]) => Promise<void>,
+    isReady: boolean,
 }

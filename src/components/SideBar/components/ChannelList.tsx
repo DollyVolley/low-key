@@ -3,10 +3,10 @@ import styled from "styled-components";
 import List from '@mui/material/List';
 import { ChannelCard } from "./ChannelCard";
 import { ChatDescription } from "@/types/chat";
-import { MOCK_CHAT_DESCRIPTIONS } from "@/mock/constants";
+import { useChatDataContext } from "@/state/chat-data";
 
 export const ChannelList: FC = () => {
-    const chatDescriptions = MOCK_CHAT_DESCRIPTIONS
+    const {chatDescriptions} = useChatDataContext()
 
     return (
     <ContactWrapper>

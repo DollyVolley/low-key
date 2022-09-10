@@ -7,10 +7,10 @@ export interface ChatDataOption {
   currentChatID: string,
   allChatIDs: string[],
   chatDescriptions: ChatDescription[],
-  getChatDataByID: (chatID: string) => ChatData,
   setCurrentChatID: (currentChatID: string) => void,
   addMessagesToChat: (chatID: string, messages: ChatMessage[]) => void,
   setMessageSeen: (chatID: string) => void,
   setChatData: (chatData: ChatData) => void,
+  setChatStarted: (chatID: string) => void,
   isReady: boolean
 }
