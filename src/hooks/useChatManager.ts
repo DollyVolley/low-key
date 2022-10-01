@@ -2,6 +2,7 @@ import { StreamsService } from "@/logic/streams-service"
 import { useChatClientContext } from "@/state/chat-client"
 import { useChatDataContext } from "@/state/chat-data"
 import { ChatData } from "@/types/chat"
+import { Navigate } from "react-router-dom"
 
 export function useChatManager() {    
     const {setClient, isReady, clientMap, removeClient} = useChatClientContext()

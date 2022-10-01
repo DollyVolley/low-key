@@ -36,6 +36,8 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   }, [account])
 
   function setChatData(chatData: ChatData): void {
+    console.debug(`Setting data for ${chatData.id}. Index: ${chatData.messages.length}`)
+
     setChatDataMap({
       ...chatDataMap,
       [chatData.id]: chatData,
@@ -60,10 +62,12 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   }  
 
   function setMessageSeen(id: string): void {
-    setChatData({
-      ...chatDataMap[id],
-      isNewMessage: false,
-    })
+    if(chatDataMap[id].isNewMessage) {
+      setChatData({
+        ...chatDataMap[id],
+        isNewMessage: false,
+      })
+    }
   }
 
   function addMessages(chatID: string, messages: ChatMessage[]) {  
