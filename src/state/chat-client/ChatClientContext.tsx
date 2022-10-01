@@ -6,5 +6,6 @@ export const ChatClientContext = createContext<ChatClientOption>({
     clientMap: {} as Record<string, ActiveClient>,
     setClient: (client: ActiveClient) => ({} as Promise<void>),
     isReady: false,
+    removeClient: (clientID: string) => {},
 });
 

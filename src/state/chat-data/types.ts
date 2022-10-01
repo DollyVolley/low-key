@@ -7,9 +7,11 @@ export interface ChatDataOption {
   currentChatID: string,
   allChatIDs: string[],
   chatDescriptions: ChatDescription[],
+  chatDataMap: {[key: string]: ChatData},
   setCurrentChatID: (currentChatID: string) => void,
-  addMessagesToChat: (chatID: string, messages: ChatMessage[]) => void,
+  addMessages: (chatID: string, messages: ChatMessage[]) => void,
   setMessageSeen: (chatID: string) => void,
+  removeChatData: (chatID: string) => void,
   setChatData: (chatData: ChatData) => void,
   setChatStarted: (chatID: string) => void,
   isReady: boolean

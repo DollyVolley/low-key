@@ -2,26 +2,18 @@ import { StreamsService } from "@/logic/streams-service"
 import { useChatClientContext } from "@/state/chat-client"
 import { useChatDataContext } from "@/state/chat-data"
 import {  ChatMessage } from "@/types/chat"
-import { useEffect, useState } from "react"
 
 export function useCurrentChat(){
-    const {currentChatData, currentChatID, addMessagesToChat} = useChatDataContext()
+    const {currentChatData, currentChatID, addMessages} = useChatDataContext()
     const {client, setClient, isReady} = useChatClientContext(currentChatID)
     const {setMessageSeen} = useChatDataContext()
-    const [messages, setMessages] = useState<ChatMessage[]>([])
-
-    useEffect(()=> {
-        setMessages(currentChatData?.messages || [] )
-    }, [currentChatData])
-
 
     async function postMessage(message: ChatMessage): Promise<void> {
         if(!isReady) return
-        setMessages([...messages, message])
+        addMessages(currentChatID, [message])
         const response = await StreamsService.sendMessage(client!, message)
-        addMessagesToChat(currentChatID, response.messages)
-
         setClient(response.client)
+        addMessages(currentChatID, response.messages)
     }
 
     function markMessagesSeen(): void {
@@ -29,13 +21,13 @@ export function useCurrentChat(){
     }
 
     return {
+        id: currentChatID,
         name: currentChatData?.name,
         links: client?.links || null,
-        messages,
+        messages: currentChatData?.messages || [],
         postMessage,
         markMessagesSeen,
         isClientLoaded: isReady,
-        id: currentChatData?.id,
         clientType: client?.clientType,
         isStarted: currentChatData?.isStarted
     }

@@ -16,10 +16,13 @@ export const TheHeader: FC<HeaderProps> = (props) => {
     const {is1200PxOrLess} = useMediaQueries()
 
     return (
-        <HeaderWrapperStyled>
-            {is1200PxOrLess && <MenuItemStyled onClick={() => setShowDrawer(!showDrawer)} sx={{fontSize: 30}} />}
-            {props.children}
-        </HeaderWrapperStyled>
+        <div>
+            <HeaderWrapperStyled>
+                {is1200PxOrLess && <MenuItemStyled onClick={() => setShowDrawer(!showDrawer)} sx={{fontSize: 30}} />}
+                {props.children}
+            </HeaderWrapperStyled>
+        </div>
+
     )
 }
 

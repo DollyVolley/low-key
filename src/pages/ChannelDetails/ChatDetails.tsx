@@ -10,6 +10,7 @@ import { useCurrentChat } from '@/hooks';
 
 export const ChatDetails: FC = () => {
     const {name, isStarted, clientType, isClientLoaded } = useCurrentChat()
+    
     const navigate = useNavigate()
 
 
@@ -19,7 +20,7 @@ export const ChatDetails: FC = () => {
     }
 
     function onRemoveChannel() {
-        console.log('lol')
+        console
         navigate('/')
     }
 

@@ -11,8 +11,7 @@ import { useChatDataContext } from '@/state/chat-data';
 
 
 export const ChannelThread: FC = () => {
-    const {currentChatID} = useChatDataContext()
-    const {messages, postMessage: sendMessage, markMessagesSeen} = useCurrentChat()
+    const {messages, postMessage: sendMessage, markMessagesSeen ,id} = useCurrentChat()
     
     const navigate = useNavigate()
     const bottomRef = useRef<HTMLDivElement>(null);
@@ -20,12 +19,12 @@ export const ChannelThread: FC = () => {
 
 
     useEffect(function onChannelChange() { 
-        if(!currentChatID) {
+        if(!id) {
             navigate('/')
         } else {
             markMessagesSeen()
         }
-    },[currentChatID])
+    },[id])
  
     async function onMessageSubmit(content: string) {
         const message = makeMessage(content, true)

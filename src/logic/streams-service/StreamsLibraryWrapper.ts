@@ -1,8 +1,9 @@
-import { ClientType,  ArchiveClient, ActiveClient, StreamsResponse} from "./types";
+import { ClientType,  ArchiveClient, ActiveClient, StreamsResponse, StreamsActor} from "./types";
 import {instantiateStreams} from "./lib/instantiateStreams";
 import streamsLib from './lib/streams/streams'
 import {generateSeed} from "./utils/generateSeed";
 import { ChatMessage } from "@/types/chat";
+import { client_getUnspentAddress } from "./lib/streams/streams_bg.wasm";
 
 const NODE_URL = "https://hornet.low-key.io/"
 let streams: any
@@ -48,6 +49,7 @@ export class StreamsLibraryWrapper  {
         return {
             client: {
                 ...client,
+                index: client.index + 1,
                 links: {
                     ...client.links,
                     subscription: subscriptionLink,
@@ -61,12 +63,16 @@ export class StreamsLibraryWrapper  {
         if(client.clientType === ClientType.AUTHOR) throw new Error("Author can't receive keyload")
         const result = await client.streamsClient!.clone().fetchNextMsg()
 
+        const lastMessageLink =  result?.link.toString() || ''
+        const index = lastMessageLink? client.index + 1 : client.index
+
         return {
             client: {
                 ...client,
+                index,
                 links: {
                     ...client.links,
-                    lastMessage: result?.link.toString() || '' // @todo - might be an issue here!
+                    lastMessage: lastMessageLink
                 }
             }        
         }
@@ -77,20 +83,29 @@ export class StreamsLibraryWrapper  {
         const address = streams.Address.parse(client.links.lastMessage)
         const publicPayload = streams.to_bytes("") 
         const maskedPayload = streams.to_bytes(message.content)
-        const response = await client.streamsClient!.clone().send_tagged_packet(address, publicPayload, maskedPayload)
-        message.msgId = response.link.toMsgIndexHex()
-        const lastMessageLink = response.link.toString()
 
-        return {
-            client: {
-                ...client,
-                links: {
-                    ...client.links,
-                    lastMessage: lastMessageLink
-                       }
+        try {
+            const response = await client.streamsClient!.clone().send_tagged_packet(address, publicPayload, maskedPayload)
+            message.msgId = response.link.toMsgIndexHex()
+            const lastMessageLink = response.link.toString()
+    
+            return {
+                client: {
+                    ...client,
+                    links: {
+                        ...client.links,
+                        lastMessage: lastMessageLink
+                        },
+                    index: client.index + 1
                     },
-            messages: [message],
+                messages: [message],
+            }
+
+        } catch(e) {
+            console.error(e)
+            throw e
         }
+
     }
 
     public static async fetchMessages(client: ActiveClient): Promise<StreamsResponse> {
@@ -109,13 +124,16 @@ export class StreamsLibraryWrapper  {
             } as ChatMessage
         })
 
+        const index = messages && messages.length ? client.index + 1: client.index
+
         return {
             client: {
                 ...client,
                 links: {
                     ...client.links,
-                    lastMessage: lastLink
-                }
+                    lastMessage: lastLink,
+                },
+                index
             },
             messages,
         }
@@ -177,7 +195,8 @@ export class StreamsLibraryWrapper  {
                 lastMessage: '',
                 subscription: '',
                 announcement: '',
-            }
+            },
+            index: 0
         }
     }
 
@@ -204,6 +223,7 @@ export class StreamsLibraryWrapper  {
         const keyloadLink = await client.clone().send_keyload_for_everyone(address) 
         return keyloadLink.link.toString()
     }
+
 }
 
 

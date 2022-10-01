@@ -24,10 +24,10 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
 
   const currentChatData = useMemo(() => {
     return chatDataMap[currentChatID]
-  }, [currentChatID])
+  }, [currentChatID, chatDataMap])
 
   const allChatDescriptions = useMemo(() => {
-    return Object.values(chatDescriptionMap) || []
+    return Object.values(chatDescriptionMap).sort((a,b) => b.lastChange - a.lastChange) || []
   }, [chatDescriptionMap])
 
   const allChatIDs = useMemo(() => {
@@ -36,7 +36,6 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   }, [account])
 
   function setChatData(chatData: ChatData): void {
-    console.log(`set ${chatData.id} with ${chatData.messages.length}`)
     setChatDataMap({
       ...chatDataMap,
       [chatData.id]: chatData,
@@ -47,14 +46,16 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   }
 
   function setChatDescription(chatData: ChatData): void {
-    setChatDescriptionMap({
+    const chatDescriptions = {
       ...chatDescriptionMap,
       [chatData.id]: describeChat(chatData)
-    })
+    }
+
+    setChatDescriptionMap(chatDescriptions)
 
     accountCache.set({
       ...account,
-      chatDescriptions: Object.values(chatDescriptionMap).sort((a,b) => b.lastChange - a.lastChange)
+      chatDescriptions: Object.values(chatDescriptions).sort((a,b) => b.lastChange - a.lastChange)
     })
   }  
 
@@ -65,11 +66,15 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
     })
   }
 
-  function addMessagesToChat(chatID: string, messages: ChatMessage[]) {  
+  function addMessages(chatID: string, messages: ChatMessage[]) {  
+    const newMessageTimestamps = messages.map(message => message.timestamp)
+    const messagesFiltered = chatDataMap[chatID].messages.filter((message: ChatMessage) => 
+      !newMessageTimestamps.includes(message.timestamp))
+
     setChatData({
       ...chatDataMap[chatID],
       isNewMessage: currentChatID !== chatID,
-      messages: [...chatDataMap[chatID].messages, ...messages]
+      messages: [...messagesFiltered, ...messages]
     })
   }
 
@@ -112,18 +117,37 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
     })
   }
 
+  function removeChatData(chatID: string) {
+    const updatedChatDataMap = {...chatDataMap}
+    const updatedChatDescriptionMap = {...chatDescriptionMap}
+
+    delete updatedChatDataMap[chatID]
+    delete updatedChatDescriptionMap[chatID]
+
+    setChatDataMap(updatedChatDataMap)
+    setChatDescriptionMap(updatedChatDescriptionMap)
+
+    chatDataCache.remove(chatID)
+    accountCache.set({
+      ...account,
+      chatDescriptions: Object.values(updatedChatDescriptionMap).sort((a,b) => b.lastChange - a.lastChange)
+    })
+  }
+
   const contextValue = useMemo(
     () => ({
       account,
       currentChatData,
       currentChatID,
       allChatIDs,
+      chatDataMap,
       chatDescriptions: allChatDescriptions,
       setCurrentChatID,
-      addMessagesToChat,
+      addMessages,
       setMessageSeen,
       setChatData,
       setChatStarted,
+      removeChatData,
       isReady
     }),
     [account, currentChatID, chatDataMap, chatDescriptionMap, isReady],

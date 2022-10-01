@@ -4,8 +4,9 @@ import { useChatDataContext } from "@/state/chat-data"
 import { ChatData } from "@/types/chat"
 
 export function useChatManager() {    
-    const {setClient, isReady, clientMap} = useChatClientContext()
-    const {setChatData, setCurrentChatID } = useChatDataContext()
+    const {setClient, isReady, clientMap, removeClient} = useChatClientContext()
+    const {setChatData, setCurrentChatID, removeChatData } = useChatDataContext()
+
 
     async function createChat(name: string): Promise<string> {
         const updatedClient = await StreamsService.createChat()
@@ -40,12 +41,18 @@ export function useChatManager() {
         }
         setChatData(chatData)
     }
+
+    function removeChat(chatID: string) {
+        removeChatData(chatID)
+        removeClient(chatID)
+    }
   
     return {
         createChat,
         joinChat,
         startChat,
-        isReady
+        isReady,
+        removeChat
     }
 
 }

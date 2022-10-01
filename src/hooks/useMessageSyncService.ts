@@ -13,7 +13,6 @@ export function useMessageSyncService(){
     },[clientMap] )
 
     async function syncChats(){
-        console.log(`Syncing: ${isReady}`)
         if(isReady ){
             clients.forEach(client => {                
                 const hasStarted = client.links.lastMessage
@@ -21,13 +20,12 @@ export function useMessageSyncService(){
                 if(hasStarted ){ 
                     StreamsService.fetchMessages(client)
                     .then((response: MessageResponse) => {
-                        setClient(response.client, response.messages)
+                        if(response.messages.length) setClient(response.client, response.messages)
                     })
                 } else if(client.clientType === ClientType.SUBSCRIBER) {
-                    StreamsService.getKeyloadLink(client).then((client: ActiveClient) => {
-                        if(client.links.lastMessage) {
-                            setClient(client)
-                        }
+                    StreamsService.getKeyloadLink(client)
+                    .then((client: ActiveClient) => {
+                        if(client.links.lastMessage) setClient(client)
                     })
                 }
             })

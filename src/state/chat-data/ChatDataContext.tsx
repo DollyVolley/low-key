@@ -9,10 +9,12 @@ export const ChatDataContext = createContext<ChatDataOption>({
     currentChatID: "",
     allChatIDs: [],
     chatDescriptions: [],
+    chatDataMap:{},
     setCurrentChatID: (currentChatID: string) => {},
     setMessageSeen: (chatID: string) => {},
     setChatData: (chatData: ChatData) => {},
-    addMessagesToChat: (chatID: string, messages?: ChatMessage[]) => {},
+    addMessages: (chatID: string, messages?: ChatMessage[]) => {},
+    removeChatData: (chatID: string) => {},
     isReady: false,
     setChatStarted: (chatID: string) => {},
 });

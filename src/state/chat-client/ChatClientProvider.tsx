@@ -6,7 +6,7 @@ import { ChatMessage } from "@/types/chat";
 import { ChatClientCache } from "@/logic/cache";
 
 export const ChatClientProvider: FC<PropsWithChildren<any>> = ({ children }) => {
-  const {addMessagesToChat, setChatStarted, account, allChatIDs } = useChatDataContext()
+  const {addMessages, setChatStarted, account, allChatIDs } = useChatDataContext()
   const [clientMap, setClientMap] = useState<{[key in string]:ActiveClient}>({})
   const [isReady, setIsReady] = useState(false)
   const [isStreamsLoaded, setIsStreamsLoaded] = useState(false)
@@ -40,8 +40,6 @@ export const ChatClientProvider: FC<PropsWithChildren<any>> = ({ children }) => 
       loadedClients[id] = client
     })
 
-    console.log(loadingPromise)
-
     await Promise.all(loadingPromise)
 
     setClientMap(loadedClients)
@@ -50,7 +48,12 @@ export const ChatClientProvider: FC<PropsWithChildren<any>> = ({ children }) => 
 
 
   async function setClient(client: ActiveClient, messages? : ChatMessage[]): Promise<void> {
-    if(messages?.length) addMessagesToChat(client.id, messages)
+    if(messages?.length) addMessages(client.id, messages)
+
+    if(clientMap[client.id] && clientMap[client.id].index >= client.index) {
+      console.error('[CLIENT] oh no - i wanted to overwrite an advanced state')
+      return
+    }
 
     if(clientMap[client.id] && !clientMap[client.id].links.lastMessage && client.links.lastMessage) {
       setChatStarted(client.id)
@@ -65,11 +68,19 @@ export const ChatClientProvider: FC<PropsWithChildren<any>> = ({ children }) => 
     chatClientCache.set(archiveClient)
   }
 
+  function removeClient(clientID: string) {
+    const newClientMap = {...clientMap}
+    delete newClientMap[clientID]
+    setClientMap(newClientMap)
+    chatClientCache.remove(clientID)
+  }
+
 
   const contextValue = useMemo(
     () => ({
       clientMap,
       setClient,
+      removeClient,
       isReady,
     }),
     [isReady, clientMap],

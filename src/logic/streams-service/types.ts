@@ -38,7 +38,8 @@ export interface ArchiveClient extends BaseClient {
 export interface BaseClient {
     id: string
     clientType: ClientType,
-    links: ClientLinks
+    links: ClientLinks,
+    index: number
 }
 
 export interface ClientLinks {

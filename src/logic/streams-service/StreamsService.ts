@@ -4,7 +4,7 @@ import { loadStreams, StreamsLibraryWrapper } from "./StreamsLibraryWrapper";
 import { StreamsResponse, ActionQueue, ActiveClient, StreamsAction, ArchiveClient, MessageResponse } from "./types";
 
 export class StreamsService {
-    private static actionQueue: ActionQueue = {}
+    public static actionQueue: ActionQueue = {}
     private static eventBus = makeEventBus<{[key: string]: StreamsResponse;}>()
 
     public static async loadStreams(): Promise<void> {
