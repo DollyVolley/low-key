@@ -2,6 +2,8 @@
 
 export * from './types';
 export { default as AbstractModelCache } from './AbstractModelCache';
-export { default as ChannelCache } from './models/ChannelCache';
-export { default as MessagesCache } from './models/MessagesCache';
+export * from './models/Account'
+export * from './models/ChatData'
+export * from './models/ChatClient'
+
 

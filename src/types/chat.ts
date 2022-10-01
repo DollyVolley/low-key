@@ -7,8 +7,10 @@ export interface Chat {
 }
 
 export interface ChatData {
+    id: string,
     name: string,
     messages: ChatMessage[],
+    isStarted: boolean,
     isNewMessage: boolean
 }
 
@@ -23,7 +25,8 @@ export interface ChatDescription {
     name: string,
     lastChange: number,
     chatID: string, 
-    started: boolean,
+    isStarted: boolean,
     isNewMessage: boolean,
     lastMessage?: ChatMessage
 }
+

@@ -1,6 +1,6 @@
 {
   "name": "low-key",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "author": {
     "name": "bodywithoutorgans"
@@ -40,12 +40,12 @@
     "buffer": "^6.0.3",
     "copy-webpack-plugin": "^11.0.0",
     "file-loader": "^6.2.0",
+    "mitt": "^3.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-is": "^18.1.0",
     "react-responsive": "^9.0.0-beta.8",
     "react-router-dom": "^6.3.0",
-    "recoil": "^0.7.3",
     "suspend-react": "^0.0.8",
     "typeface-roboto": "^1.1.13"
   }

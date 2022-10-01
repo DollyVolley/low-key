@@ -1,24 +1,28 @@
 import React, {FC} from 'react';
-import { useRecoilState } from 'recoil';
 import styled from "styled-components";
 
 import { useMediaQueries } from '@/hooks/useMediaQueries';
 import { Menu } from '@mui/icons-material';
-import { showDrawerAtom } from '@/store/app/drawer/showDrawer';
 
 interface HeaderProps {
     children?: React.ReactNode;
 }
 
 export const TheHeader: FC<HeaderProps> = (props) => {
-    const [showDrawer, setShowDrawer] = useRecoilState(showDrawerAtom)
+    //@todo replace with global state
+    const setShowDrawer = (x: boolean)=>{}
+    const showDrawer = false
+    
     const {is1200PxOrLess} = useMediaQueries()
 
     return (
-        <HeaderWrapperStyled>
-            {is1200PxOrLess && <MenuItemStyled onClick={() => setShowDrawer(!showDrawer)} sx={{fontSize: 30}} />}
-            {props.children}
-        </HeaderWrapperStyled>
+        <div>
+            <HeaderWrapperStyled>
+                {is1200PxOrLess && <MenuItemStyled onClick={() => setShowDrawer(!showDrawer)} sx={{fontSize: 30}} />}
+                {props.children}
+            </HeaderWrapperStyled>
+        </div>
+
     )
 }
 

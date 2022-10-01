@@ -1,15 +1,14 @@
 import React, {FC, useEffect, useState} from 'react';
-import { useRecoilValue } from 'recoil';
 import styled from "styled-components";
 
 import { useNavigate, useLocation } from 'react-router-dom';
-import { currentChatDescriptionSelector } from '@/store/chat';
+import { useChatDataContext } from '@/state/chat-data';
 
 export const ManageChatHeader: FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const description = useRecoilValue(currentChatDescriptionSelector)
-
+    const {currentChatData} = useChatDataContext()
+    
     const [routeName, setRouteName] = useState('')
 
 
@@ -24,7 +23,7 @@ export const ManageChatHeader: FC = () => {
 
 
     function onTitleClick(): void {
-        if(description?.started) {
+        if(currentChatData?.isStarted) {
             navigate("/chat")
         }
     }

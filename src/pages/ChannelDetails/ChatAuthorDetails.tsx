@@ -3,16 +3,13 @@ import styled from "styled-components";
 import { useNavigate, useParams } from 'react-router-dom';
 import { UIButton } from '@/components/ui/button/UIButton';
 import { UITextField } from '@/components/ui/text-field/UITextField';
-import { useRecoilValue } from 'recoil';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
+import { useCurrentChat } from '@/hooks/useCurrentChat';
 import { useChatManager } from '@/hooks/useChatManager';
-import { useChat } from '@/hooks/useChat';
-import { currentChatIDAtom } from '@/store/chat';
 
 
 export const ChatAuthorDetails: FC = () => {
-    const currentChatID = useRecoilValue(currentChatIDAtom)
-    const {name, links} = useChat(currentChatID)
+    const {name, links, id} = useCurrentChat()
     const {startChat} = useChatManager()
 
     const {subLink} = useParams()
@@ -31,7 +28,7 @@ export const ChatAuthorDetails: FC = () => {
     async function onStartChannel() {
         setLoading(true)
         try {
-            await startChat(subscriptionLink)
+            await startChat(id, subscriptionLink)
             navigate('/chat')
         } catch (error) {
             alert((error))
@@ -44,8 +41,8 @@ export const ChatAuthorDetails: FC = () => {
         <>
             <UiBoxContainer title='Created Chat'>
                 <SectionWrapperStyled>
-                    <TextWrapperStyled> <strong>1. </strong>Invite {name} to this chat with this Join Link</TextWrapperStyled>
-                    <UITextField label="Join Link:" value={links.announcement} isCopyable={true} />
+                    <TextWrapperStyled><strong>1. </strong>Invite {name} to this chat with this Join Link </TextWrapperStyled>
+                    <UITextField label="Join Link:" value={links!.announcement} isCopyable={true} />
                 </SectionWrapperStyled>
 
                 <SectionWrapperStyled>

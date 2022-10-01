@@ -1,28 +1,27 @@
-import React,{FC, ReactElement} from "react";
+import React,{FC, useState} from "react";
 import styled from "styled-components";
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { useRecoilState } from "recoil";
 import { useNavigate } from "react-router-dom";
 import { abbreviateText } from "@/utils/app/abbreviateText";
 import { getFormattedDateTime } from "@/utils/app/getFormattedTime";
-import { currentChatIDAtom } from "@/store/chat";
 import { ChatDescription } from "@/types/chat";
 import CircleIcon from '@mui/icons-material/Circle';
+import { useChatDataContext } from "@/state/chat-data";
 
 export const ChannelCard: FC<{description: ChatDescription}> = ({description}) => {
-    const [currentChannelID, setCurrentChannelID] = useRecoilState(currentChatIDAtom);
+    const {currentChatID, setCurrentChatID} = useChatDataContext()
     const navigate = useNavigate()  
 
 
     function selectContact() {
-        setCurrentChannelID(description.chatID)
+        setCurrentChatID(description.chatID)
         selectChannelView()
     }
 
     function selectChannelView(): void {
-        if(description.started) {
+        if(description.isStarted) {
             navigate('/chat')
         } else {
             navigate(`/channel/id/${description!.chatID}`)
@@ -33,7 +32,7 @@ export const ChannelCard: FC<{description: ChatDescription}> = ({description}) =
         const lastChangeTime = getFormattedDateTime(description.lastChange)
 
         let messagePreview = ''
-        if(!description.started || !description.lastMessage) {
+        if(!description.isStarted || !description.lastMessage) {
             messagePreview = 'Created Channel'
         } else {
             messagePreview = abbreviateText(description.lastMessage.content, 17)
@@ -45,7 +44,7 @@ export const ChannelCard: FC<{description: ChatDescription}> = ({description}) =
     return (
             <ListItemStyled 
             disablePadding onClick={selectContact}
-            className={`${description.chatID === currentChannelID ? "active" : ""}`}>
+            className={`${description.chatID === currentChatID ? "active" : ""}`}>
                 <ListItemButton>
                     <ListItemText 
                         primary={<>

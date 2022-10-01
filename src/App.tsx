@@ -1,39 +1,24 @@
 import React, {FC, useEffect} from 'react';
 import {useMediaQueries} from "@/hooks/useMediaQueries";
-import { useRecoilState, useSetRecoilState } from 'recoil';
 import { AppRoutes } from '@/routing';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { SideBar } from '@/components/SideBar/SideBar';
 import styled from 'styled-components';
-import { loadStreams } from './logic/streams-service/StreamsService';
-import { isStreamsLoadedAtom } from './store/app';
 import { SwipeableDrawer } from '@mui/material';
-import { showDrawerAtom } from './store/app/drawer/showDrawer';
-import { useMessageService } from './hooks';
+import { useMessageSyncService } from './hooks';
 
 export const App: FC = () => {
-    const setIsStreamsLoaded = useSetRecoilState(isStreamsLoadedAtom)
-    const [showDrawer, setShowDrawer] = useRecoilState(showDrawerAtom)
+    // @todo get from global (app) state
+    const [showDrawer, setShowDrawer] = [false,(x: boolean)=>{}]
     const {is1200PxOrLess} = useMediaQueries()
 
-    const messageService = useMessageService()
+    const syncDaemon = useMessageSyncService()
 
-
-    useEffect(()=> {
-        preFetchAsyncImport()
-    }, [])
 
     useEffect(function manageDrawerVisibility() {
         setShowDrawer(!is1200PxOrLess)
 
     }, [is1200PxOrLess])
-
-    // Loads the asyncronously imported stream library used in the message service immediately
-    async function preFetchAsyncImport() {
-        await loadStreams()
-        setIsStreamsLoaded(true)
-    }
-
 
     return (
     <ApplicationWrapperStyled>

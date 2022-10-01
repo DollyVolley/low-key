@@ -1,2 +1,3 @@
-export {StreamsService} from './StreamsService'
+export * from './StreamsService'
 export * from './types'
+export * from './utils'

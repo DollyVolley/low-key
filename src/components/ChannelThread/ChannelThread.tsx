@@ -3,17 +3,15 @@ import {MessageCard} from "@/components/ChannelThread/components/MessageCard";
 import styled from "styled-components";
 import {MessageInput} from "@/components/ChannelThread/components/MessageInput";
 import { makeMessage } from '@/utils/channel';
-import { currentChatIDAtom } from '@/store/chat';
-import { useRecoilValue } from 'recoil';
 import { useMediaQueries } from '@/hooks/useMediaQueries';
-import { useChat } from '@/hooks/useChat';
+import { useCurrentChat } from '@/hooks/useCurrentChat';
 import { ChatMessage } from '@/types/chat';
 import { useNavigate } from 'react-router-dom';
+import { useChatDataContext } from '@/state/chat-data';
 
 
 export const ChannelThread: FC = () => {
-    const channelID = useRecoilValue(currentChatIDAtom)
-    const {messages, postMessage: sendMessage, markMessagesSeen} = useChat(channelID)
+    const {messages, postMessage: sendMessage, markMessagesSeen ,id} = useCurrentChat()
     
     const navigate = useNavigate()
     const bottomRef = useRef<HTMLDivElement>(null);
@@ -21,12 +19,12 @@ export const ChannelThread: FC = () => {
 
 
     useEffect(function onChannelChange() { 
-        if(!channelID) {
+        if(!id) {
             navigate('/')
         } else {
             markMessagesSeen()
         }
-    },[channelID])
+    },[id])
  
     async function onMessageSubmit(content: string) {
         const message = makeMessage(content, true)
