@@ -9,15 +9,25 @@ import { getFormattedDateTime } from "@/utils/app/getFormattedTime";
 import { ChatDescription } from "@/types/chat";
 import CircleIcon from '@mui/icons-material/Circle';
 import { useChatDataContext } from "@/state/chat-data";
+import { useMediaQueries } from "@/hooks";
+import { useAppContext } from "@/state/app";
 
 export const ChannelCard: FC<{description: ChatDescription}> = ({description}) => {
     const {currentChatID, setCurrentChatID} = useChatDataContext()
+    const {is1200PxOrLess} = useMediaQueries()
+    const {setIsMenuOpen} = useAppContext()
+
+
     const navigate = useNavigate()  
 
 
     function selectContact() {
         setCurrentChatID(description.chatID)
         selectChannelView()
+
+        if(is1200PxOrLess) {
+            setIsMenuOpen(false)
+        }
     }
 
     function selectChannelView(): void {

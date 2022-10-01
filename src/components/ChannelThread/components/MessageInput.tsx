@@ -42,12 +42,13 @@ export const MessageInput: FC<MessageInputProps> = ({submitMessage}) => {
 const MessageInputWrapper = styled.div`
     --button-width: 75px;
     --max-height: 80px;
+    --padding-sides: 15px;
     height: var(--max-height);
     box-shadow: 0 -10px 10px 1px rgba(0,0,0,0.1);
 `
 const GroupContainerStyled = styled.div`
     display: flex;
-    width: 100%;
+    width: calc(100% - 2 * var(--padding-sides));
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 14px 0;

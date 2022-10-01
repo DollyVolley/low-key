@@ -35,6 +35,7 @@ const HeaderWrapperStyled = styled.div`
 `
 
 const TitleStyled = styled.div`
+    margin-left: 10px;
     text-align: left;
     font-size: 2rem;
     font-weight: bold;
