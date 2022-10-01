@@ -3,22 +3,26 @@ import styled from "styled-components";
 
 import { useMediaQueries } from '@/hooks/useMediaQueries';
 import { Menu } from '@mui/icons-material';
+import { useAppContext } from '@/state/app';
 
 interface HeaderProps {
     children?: React.ReactNode;
 }
 
 export const TheHeader: FC<HeaderProps> = (props) => {
-    //@todo replace with global state
-    const setShowDrawer = (x: boolean)=>{}
-    const showDrawer = false
-    
+
+    const {setIsMenuOpen, isMenuOpen} = useAppContext()
+
     const {is1200PxOrLess} = useMediaQueries()
+
+    function toggleMenu() {
+        setIsMenuOpen(!isMenuOpen)
+    }
 
     return (
         <div>
             <HeaderWrapperStyled>
-                {is1200PxOrLess && <MenuItemStyled onClick={() => setShowDrawer(!showDrawer)} sx={{fontSize: 30}} />}
+                {is1200PxOrLess && <MenuItemStyled onClick={toggleMenu} sx={{fontSize: 30}} />}
                 {props.children}
             </HeaderWrapperStyled>
         </div>

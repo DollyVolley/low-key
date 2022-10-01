@@ -6,18 +6,17 @@ import { SideBar } from '@/components/SideBar/SideBar';
 import styled from 'styled-components';
 import { SwipeableDrawer } from '@mui/material';
 import { useMessageSyncService } from './hooks';
+import { useAppContext } from './state/app';
 
 export const App: FC = () => {
-    // @todo get from global (app) state
-    const [showDrawer, setShowDrawer] = [false,(x: boolean)=>{}]
+    const {isMenuOpen, setIsMenuOpen} = useAppContext()
     const {is1200PxOrLess} = useMediaQueries()
 
     const syncDaemon = useMessageSyncService()
 
 
     useEffect(function manageDrawerVisibility() {
-        setShowDrawer(!is1200PxOrLess)
-
+        setIsMenuOpen(!is1200PxOrLess)
     }, [is1200PxOrLess])
 
     return (
@@ -25,9 +24,9 @@ export const App: FC = () => {
         <Router >
             <SwipeableDrawer
                 anchor={'left'}
-                open={showDrawer}
-                onClose={() => setShowDrawer(false)}
-                onOpen={() => setShowDrawer(true)}
+                open={isMenuOpen}
+                onClose={() => setIsMenuOpen(false)}
+                onOpen={() => setIsMenuOpen(true)}
                 variant={is1200PxOrLess ? 'temporary' : 'permanent'}
             >
                 <SideBar/>

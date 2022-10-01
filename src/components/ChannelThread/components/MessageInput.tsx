@@ -50,7 +50,7 @@ const GroupContainerStyled = styled.div`
     width: 100%;
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: calc((var(--input-height) - var(--max-height)) / 2) 0;
+    padding: 14px 0;
 `
 const InputStyled = styled(TextField)`
     width: calc(100% - var(--button-width));
