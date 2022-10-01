@@ -7,9 +7,11 @@ import { ChannelSubscriberDetails } from './ChatSubscriberDetails';
 import { ChatAuthorDetails } from './ChatAuthorDetails';
 import { Button } from '@mui/material';
 import { useCurrentChat } from '@/hooks';
+import { useChatManager } from '@/hooks/useChatManager';
 
 export const ChatDetails: FC = () => {
-    const {name, isStarted, clientType, isClientLoaded } = useCurrentChat()
+    const {name, isStarted, clientType, isClientLoaded, id } = useCurrentChat()
+    const {removeChat} = useChatManager()
     
     const navigate = useNavigate()
 
@@ -20,7 +22,7 @@ export const ChatDetails: FC = () => {
     }
 
     function onRemoveChannel() {
-        console
+        removeChat(id)
         navigate('/')
     }
 
@@ -30,10 +32,12 @@ export const ChatDetails: FC = () => {
         {isClientLoaded && <>
             <ChannelNameStyled>{name}</ChannelNameStyled>
 
-            <ChannelActorWrapper>
+            {!isStarted &&
+                <ChannelActorWrapper>
                 {clientType === ClientType.AUTHOR && <ChatAuthorDetails/>}
                 {clientType === ClientType.SUBSCRIBER && <ChannelSubscriberDetails/>}
-            </ChannelActorWrapper>
+                </ChannelActorWrapper>
+            }
 
             <Button  color="error" onClick={onRemoveChannel}>Remove Chat</Button>
         </>
