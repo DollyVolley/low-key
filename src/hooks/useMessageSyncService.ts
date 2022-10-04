@@ -1,18 +1,17 @@
 import { ActiveClient, ClientType, MessageResponse, StreamsService } from "@/logic/streams-service";
 import { useChatClientContext } from "@/state/chat-client";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useInterval } from "./utils/useInterval";
 
 export function useMessageSyncService(){
     const {clientMap, setClient, isReady} = useChatClientContext()
 
-    useInterval(syncChats, 5000)
-
     const clients = useMemo(() => {
         return Object.values(clientMap)
     },[clientMap] )
 
-    async function syncChats(){
+
+    const syncChats = useCallback(async() => { 
         if(isReady ){
             clients.forEach(client => {                
                 const hasStarted = client.links.lastMessage
@@ -30,5 +29,10 @@ export function useMessageSyncService(){
                 }
             })
         }
-    }
+    }, [clients])
+
+    useInterval(syncChats, 5000)
 }
+
+
+
