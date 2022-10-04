@@ -42,16 +42,16 @@ export const JoinChannel: FC = () => {
     return (
     <PageWrapper> 
         <UiBoxContainer title={'Join existing Chat'}>
-            
-            <SectionWrapperStyled>
-                <UITextField label={'Name'} value={name} setValue={setName} />
-            </SectionWrapperStyled>
 
             <SectionWrapperStyled>
                 <TextWrapperStyled>
                     If you don't have a Join Link you can create a new chat and invite your chat partner <Link to={'/channel/create'}>here</Link>
                 </TextWrapperStyled>
                 <UITextField label={'Join Link'} value={link} setValue={setLink} />
+            </SectionWrapperStyled>
+            
+            <SectionWrapperStyled>
+                <UITextField disabled={!link} label={'Name'} value={name} setValue={setName} />
             </SectionWrapperStyled>
 
             <ButtonWrapperStyled>

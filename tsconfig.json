@@ -16,7 +16,7 @@
     },
     "typeRoots": [
       "node_modules/@types",
-      "src/styling/typings"
+      "src/styling/typings",
     ],
     "esModuleInterop": true,
     "composite": false,
