@@ -2,12 +2,12 @@ import React, {FC} from 'react';
 import styled from "styled-components";
 
 export const Home: FC = () => {
+    const BackgroundImage = require('@/assets/images/logo.png');
+
     return (
     <PageWrapper> 
         <TitleContainerStyled>
-            <TitleStyled>
-                low key
-            </TitleStyled>
+            <LogoStyled src={BackgroundImage} alt="logo" />
         </TitleContainerStyled>
 
     </PageWrapper>
@@ -22,14 +22,15 @@ const PageWrapper = styled.div`
     right: 0;
     text-align: center;
 `
+
 const TitleContainerStyled = styled.div`
     width: 200px;
     height: 200px;
     margin: 30vh auto auto;
 `
-const TitleStyled = styled.h1`
-    font-size: 5rem;
-    letter-spacing: 0.8rem;
-    color: #3a3a3e;
+
+const LogoStyled = styled.img`
+    width: 200px;
+    height: 200px;
 `
 

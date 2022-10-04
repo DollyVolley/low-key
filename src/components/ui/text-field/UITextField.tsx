@@ -6,6 +6,7 @@ import { UiCopyButton } from "../button/UiCopyButton";
 import { PropaneSharp } from "@mui/icons-material";
 
 interface UITextFieldProps {
+    disabled?: boolean,
     value: string,
     label?: string, 
     isCopyable?: boolean,
@@ -14,7 +15,7 @@ interface UITextFieldProps {
 }
 
 export const UITextField: FC<UITextFieldProps> = (props) => {
-    const disabled = !props.setValue;
+    const disabled = !props.setValue || props.disabled
 
     function updateValue(event: FormEvent) {
         if(disabled) return

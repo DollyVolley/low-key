@@ -17,6 +17,6 @@ export const chatRoutes = (
       <Route index element={<ChatDetails />} />
       <Route path="accept/:subscriptionLink" element={<ChatDetails />} />
     </Route>
-    <Route path="*" element={<div>Hey Ho kleiner Stern</div>} />
+    <Route path="*" element={<div>Dios Mios! 404</div>} />
   </Route>
 );

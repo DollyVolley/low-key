@@ -21,7 +21,7 @@ export const TheHeader: FC<HeaderProps> = (props) => {
 
     return (
         <div>
-            <HeaderWrapperStyled>
+            <HeaderWrapperStyled className={!!props.children? '': 'empty'}>
                 {is1200PxOrLess && <MenuItemStyled onClick={toggleMenu} sx={{fontSize: 30}} />}
                 {props.children}
             </HeaderWrapperStyled>
@@ -36,6 +36,10 @@ const HeaderWrapperStyled = styled.div`
     height: 80px;
     line-height: 80px;
     border-bottom: 2px solid #f0f0f0;
+
+    &.empty {
+        border: none;
+    }
 `
 
 const MenuItemStyled = styled(Menu)`

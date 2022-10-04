@@ -1,5 +1,6 @@
 import { ActiveClient, ClientType, MessageResponse, StreamsService } from "@/logic/streams-service";
 import { useChatClientContext } from "@/state/chat-client";
+import { playNotificationSound } from "@/utils/app/playNotificationSound";
 import { useCallback, useMemo } from "react";
 import { useInterval } from "./utils/useInterval";
 
@@ -13,21 +14,28 @@ export function useMessageSyncService(){
 
     const syncChats = useCallback(async() => { 
         if(isReady ){
-            clients.forEach(client => {                
+            let isNewMessage = false
+            const workerPromise = clients.map(async(client: ActiveClient) => {                
                 const hasStarted = client.links.lastMessage
 
                 if(hasStarted ){ 
-                    StreamsService.fetchMessages(client)
-                    .then((response: MessageResponse) => {
-                        if(response.messages.length) setClient(response.client, response.messages)
-                    })
+                    const response = await StreamsService.fetchMessages(client)
+                    if(response.messages.length) {
+                        isNewMessage = true
+                        setClient(response.client, response.messages)
+                    }
                 } else if(client.clientType === ClientType.SUBSCRIBER) {
-                    StreamsService.getKeyloadLink(client)
-                    .then((client: ActiveClient) => {
-                        if(client.links.lastMessage) setClient(client)
-                    })
+                    const updatedClient = await StreamsService.getKeyloadLink(client)
+                    if(updatedClient.links.lastMessage) {
+                        setClient(updatedClient)
+                    }
                 }
             })
+
+            await Promise.all(workerPromise)
+            if(isNewMessage) {
+                playNotificationSound()
+            }
         }
     }, [clients])
 

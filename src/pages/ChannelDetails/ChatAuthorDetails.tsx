@@ -42,7 +42,7 @@ export const ChatAuthorDetails: FC = () => {
             <UiBoxContainer title='Created Chat'>
                 <SectionWrapperStyled>
                     <TextWrapperStyled><strong>1. </strong>Invite {name} to this chat with this Join Link </TextWrapperStyled>
-                    <UITextField label="Join Link:" value={links!.announcement} isCopyable={true} />
+                    <UITextFieldStyled label="Join Link:" value={links!.announcement} isCopyable={true} />
                 </SectionWrapperStyled>
 
                 <SectionWrapperStyled>

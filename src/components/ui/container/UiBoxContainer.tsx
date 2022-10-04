@@ -1,3 +1,5 @@
+import { useMediaQueries } from "@/hooks";
+import { useAppContext } from "@/state/app";
 import { Paper } from "@mui/material";
 import React, { FC, ReactElement, ReactNode } from "react";
 import styled from "styled-components";
@@ -9,9 +11,11 @@ interface UiBoxContainerProps {
 
 export const UiBoxContainer: FC<UiBoxContainerProps> = (props) => {
 
+    const {isMobile} = useAppContext()
+
     return (
         <Wrapper> 
-            <UiBoxContainerStyled elevation={3}> 
+            <UiBoxContainerStyled elevation={3} className={isMobile? 'mobile' : ''}> 
                 <TitleStyled>{props.title}</TitleStyled>
 
                 {props.children}
@@ -43,6 +47,16 @@ const UiBoxContainerStyled = styled(Paper)`
         margin: 0 36px 0px;
       }
     }
+
+    &.mobile {
+        > * {
+        margin: 0 0 36px;
+
+      &:last-child {
+        margin: 0 36px 0px;
+      }
+    }
+}
 
 
 
