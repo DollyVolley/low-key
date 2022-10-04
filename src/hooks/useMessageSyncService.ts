@@ -19,6 +19,7 @@ export function useMessageSyncService(){
                 const hasStarted = client.links.lastMessage
 
                 if(hasStarted ){ 
+                    console.debug(`Syncing ${client.id} index ${client.index} last link ${client.links.lastMessage} client ${client.streamsClient}`)
                     const response = await StreamsService.fetchMessages(client)
                     if(response.messages.length) {
                         isNewMessage = true
@@ -34,7 +35,11 @@ export function useMessageSyncService(){
 
             await Promise.all(workerPromise)
             if(isNewMessage) {
-                playNotificationSound()
+                try{
+                    playNotificationSound()
+                } catch(e){
+                    console.error(e)
+                }
             }
         }
     }, [clients])

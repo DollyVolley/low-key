@@ -36,8 +36,6 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   }, [account])
 
   function setChatData(chatData: ChatData): void {
-    console.debug(`Setting data for ${chatData.id}. Index: ${chatData.messages.length}`)
-
     setChatDataMap({
       ...chatDataMap,
       [chatData.id]: chatData,
