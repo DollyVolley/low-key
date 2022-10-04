@@ -1,0 +1,17 @@
+{
+  "short_name": "low-key",
+  "name": "low-key | private communication",
+  "icons": [
+    {
+      "src": "lgo.png",
+      "sizes": "354x344",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#FAFAFA",
+  "background_color": "#FAFAFA",
+  "prefer_related_applications": true
+}

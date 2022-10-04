@@ -6,6 +6,8 @@ import 'typeface-roboto'
 import { ChatDataContextProvider } from './state/chat-data';
 import { ChatClientProvider } from './state/chat-client';
 import { AppProvider } from './state/app/AppProvider';
+import * as serviceWorker from './ServiceWorker';
+
 
 const container = document.getElementById('root')
 const root = createRoot(container!)
@@ -23,3 +25,5 @@ const RootComponent: FC = () => {
 }
 
 root.render(<RootComponent/>)
+
+serviceWorker.register()
