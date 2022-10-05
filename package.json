@@ -20,6 +20,7 @@
     "@types/styled-components": "^5.1.25",
     "@wasm-tool/wasm-pack-plugin": "^1.6.0",
     "babel-loader": "^8.2.5",
+    "compression-webpack-plugin": "^10.0.0",
     "css-loader": "^6.7.1",
     "html-loader": "^3.1.0",
     "node-sass": "^7.0.1",

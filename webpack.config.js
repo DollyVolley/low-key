@@ -1,18 +1,22 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const path = require('path');
+
+const productionGzipExtensions = ['js', 'css'];
+
 
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
     output: {
-      filename: 'bundle.js',
+      filename: "js/bundle.[contenthash].min.js",
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/'
-    },
+    }, 
     optimization: {
         chunkIds: 'named',
     },
-    mode: "development",
+    mode: "production",
     resolve: {
         extensions: ['.js', '.ts', '.tsx'],
         alias: {
@@ -66,11 +70,16 @@ module.exports = {
         patterns: [
             { from: 'public' }
         ]
-    }),
+      }),
       new webpack.ProvidePlugin({
           Buffer: ['buffer', 'Buffer'],
       }),
-
+      new CompressionWebpackPlugin({
+        algorithm: 'gzip',
+        test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+        threshold: 10240,
+        minRatio: 0.8
+      }),
     ],
     devServer: {
       port: 8000,
