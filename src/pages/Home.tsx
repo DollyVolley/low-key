@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import styled from "styled-components";
 
 export const Home: FC = () => {
-    const BackgroundImage = require('@/assets/images/logo.png');
+    const BackgroundImage = require('@/assets/images/background.png');
 
     return (
     <PageWrapper> 

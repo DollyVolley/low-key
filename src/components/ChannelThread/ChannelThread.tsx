@@ -54,7 +54,7 @@ export const ChannelThread: FC = () => {
 const MessageThreadWrapper = styled.div`
     --max-width: 1300px;
     --input-height: 110px;
-    --channel-header-height: 80px;
+    --channel-header-height: 90px;
     width: 100%;
     height: 100%;
     display: flex;

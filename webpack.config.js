@@ -6,7 +6,6 @@ const path = require('path');
 
 const productionGzipExtensions = ['js', 'css'];
 
-
 module.exports = {
     entry: path.resolve(__dirname, 'src', 'index.tsx'),
     output: {
@@ -45,18 +44,18 @@ module.exports = {
           use: ["style-loader", "css-loader"],
         },
         {
-            test: /\.s(a|c)ss$/,
-            use: [
-              'style-loader',
-              {
-                loader: 'css-loader',
-                options: {
-                    modules: true,
-                    localIdentName: '[local]'
-                    }
-              },
-              'sass-loader'
-            ]
+          test: /\.s(a|c)ss$/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                  modules: true,
+                  localIdentName: '[local]'
+                  }
+            },
+            'sass-loader'
+          ]
         },
         {
           test: /\.mp3$/,
@@ -64,7 +63,6 @@ module.exports = {
       },
         {
           test: /\.(jpe?g|png|gif|svg)$/i, 
-          use: ['file-loader?hash=sha512&digest=hex&name=img/[contenthash].[ext]'],
           type: "asset/resource",
       }]
     },
@@ -88,7 +86,7 @@ module.exports = {
     devServer: {
       port: 8000,
       historyApiFallback: true,
-  },
+    },
     experiments: {
       asyncWebAssembly: true,
       syncWebAssembly: true
