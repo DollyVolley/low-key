@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 const productionGzipExtensions = ['js', 'css'];
@@ -13,6 +14,7 @@ module.exports = {
       path: path.resolve(__dirname, 'dist'),
       publicPath: '/'
     }, 
+    context: path.resolve(__dirname, './src'),
     optimization: {
         chunkIds: 'named',
     },
@@ -62,15 +64,17 @@ module.exports = {
       },
         {
           test: /\.(jpe?g|png|gif|svg)$/i, 
+          use: ['file-loader?hash=sha512&digest=hex&name=img/[contenthash].[ext]'],
           type: "asset/resource",
       }]
     },
     plugins: [
       new CopyWebpackPlugin({
         patterns: [
-            { from: 'public' }
+            { from: '../public' }
         ]
       }),
+      new HtmlWebpackPlugin({ template: 'index.html.ejs', publicPath: '/' }),
       new webpack.ProvidePlugin({
           Buffer: ['buffer', 'Buffer'],
       }),
