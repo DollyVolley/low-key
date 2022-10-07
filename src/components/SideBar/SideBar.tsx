@@ -4,6 +4,8 @@ import styled from "styled-components";
 import { Link, useNavigate } from 'react-router-dom';
 import { ChannelList } from './components/ChannelList';
 import { useAppContext } from '@/state/app';
+import { VERSION } from '@/config/environment';
+
 
 const LogoImage = require('@/assets/images/logo.png');
 
@@ -11,6 +13,7 @@ const LogoImage = require('@/assets/images/logo.png');
 export const SideBar: FC = () => {
     const {setIsMenuOpen} = useAppContext()
     const navigate = useNavigate()
+    
 
 
     function navigateTo(path: string) {
@@ -29,6 +32,7 @@ export const SideBar: FC = () => {
             <MenuButtonStyled onClick={() => navigateTo('/channel/join')}>Join Chat</MenuButtonStyled> 
         </NewContactMenuStyled>
 
+        <VersionTextStyled>{VERSION}</VersionTextStyled>
         <ChannelList/>
 
     </div>
@@ -36,7 +40,7 @@ export const SideBar: FC = () => {
 }
 
 const LogoContainer = styled.div`
-    margin: 0 65px 0 ;
+    margin: 0 40px 0 ;
     padding: 10px; 
     cursor: pointer;
 `
@@ -59,5 +63,13 @@ const MenuButtonStyled = styled.div`
     margin: 10px 0;
     display: block;
     cursor: pointer;
+    font-family: 'Roboto', sans-serif;
 `
 
+const VersionTextStyled = styled.span`
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    font-size: 10pt;
+    color: #3a3a3e;
+`

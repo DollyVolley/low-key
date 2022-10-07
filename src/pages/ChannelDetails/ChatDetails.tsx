@@ -11,30 +11,28 @@ import { useChatManager } from '@/hooks/useChatManager';
 import { useChatClientContext } from '@/state/chat-client';
 import { UITextField } from '@/components/ui/text-field/UITextField';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
+import { useAppContext } from '@/state/app';
+import { UiPageWrapper } from '@/components/ui/page-wrapper/UiPageWrapper';
 
 export const ChatDetails: FC = () => {
     const {name, isStarted, clientType, isClientLoaded, id } = useCurrentChat()
     const {client} = useChatClientContext(id)
     const {removeChat} = useChatManager()
-    
+    const {isMobile} = useAppContext()
     const navigate = useNavigate()
-
-
-    function goBack() {
-        if(!isStarted) return
-        navigate('/chat')
-    }
 
     function onRemoveChannel() {
         removeChat(id)
         navigate('/')
     }
 
-    return (<PageWrapper> 
-        
-        <FormWrapperStyled>
+    return (
+    <UiPageWrapper> 
+        <span>        
         {isClientLoaded && <>
-            <ChannelNameStyled>{name}</ChannelNameStyled>
+            <ChannelNameStyled className={isMobile? 'mobile' : ''}>{name}</ChannelNameStyled>
+
+            <ButtonStyled  color="error" onClick={onRemoveChannel}>Remove Chat</ButtonStyled>
 
             {isStarted?
                 <UiBoxContainer title='Details'>
@@ -54,30 +52,17 @@ export const ChatDetails: FC = () => {
                     {clientType === ClientType.SUBSCRIBER && <ChannelSubscriberDetails/>}
                 </ChannelActorWrapper>
             } 
-
-            <Button  color="error" onClick={onRemoveChannel}>Remove Chat</Button>
         </>
         }
-
-        </FormWrapperStyled>
-    </PageWrapper>
+        </span>
+    </UiPageWrapper>
     )
 }
-
-const PageWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-`
 
 const SectionWrapperStyled = styled.div`
     margin-bottom: 30px;
 `
 
-const FormWrapperStyled = styled.div`
-    width: 100%;
-    margin: 5vh auto;
-    text-align: center;
-`
 
 const UITextFieldStyled = styled(UITextField)`
     width: 10%;
@@ -86,10 +71,17 @@ const UITextFieldStyled = styled(UITextField)`
 
 const ChannelNameStyled = styled.h1`
     font-size: 4em;
+
+    &.mobile {
+        font-size: 2em;
+    }
 `
 
 const ChannelActorWrapper = styled.div`
     margin-bottom: 100px;
 `
 
+const ButtonStyled = styled(Button)`
+    margin-bottom: 20px;
+    `
 

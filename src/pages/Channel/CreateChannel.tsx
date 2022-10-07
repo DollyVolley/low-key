@@ -8,6 +8,7 @@ import { UITextField } from '@/components/ui/text-field/UITextField';
 import { useChatManager } from '@/hooks/useChatManager';
 import { useMediaQueries } from '@/hooks';
 import { useAppContext } from '@/state/app';
+import { UiPageWrapper } from '@/components/ui/page-wrapper/UiPageWrapper';
 
 
 export const CreateChannel: FC = () => {
@@ -17,10 +18,6 @@ export const CreateChannel: FC = () => {
     const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const {isMobile} = useAppContext()
-
-
-
     async function onCreate() {
         if(name === '') return
         setLoading(true)
@@ -29,29 +26,19 @@ export const CreateChannel: FC = () => {
     }
 
     return ( 
-        <PageWrapperStyled className={isMobile? 'mobile' : ''}>
+        <UiPageWrapper>
             <UiBoxContainer title='Create new Chat'>
                 <SectionWrapperStyled>
                     <UITextField label="Name" value={name} setValue={setName} />
                 </SectionWrapperStyled>
 
                 <ButtonWrapperStyled> 
-                    <UIButton text="Create" isLoading={loading} onClick={onCreate} />
+                    <UIButton text="Create" isLoading={loading} onClick={onCreate} variant='outlined' />
                 </ButtonWrapperStyled>
             </UiBoxContainer>
-        </PageWrapperStyled>
+        </UiPageWrapper>
     )
 }
-
-const PageWrapperStyled = styled.div`
-    width: 100%;
-    margin: 5vh auto;
-    text-align: center;
-
-    &.mobile { 
-        margin: 0 auto;
-    }
-`
 
 const SectionWrapperStyled = styled.div`
 margin-bottom: 30px;

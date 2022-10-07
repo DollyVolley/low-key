@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+
 const path = require('path');
 
 const productionGzipExtensions = ['js', 'css'];
@@ -67,6 +69,7 @@ module.exports = {
       }]
     },
     plugins: [
+      new NodePolyfillPlugin(),
       new CopyWebpackPlugin({
         patterns: [
             { from: '../public' }

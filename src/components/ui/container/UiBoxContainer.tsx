@@ -10,13 +10,12 @@ interface UiBoxContainerProps {
 }
 
 export const UiBoxContainer: FC<UiBoxContainerProps> = (props) => {
-
     const {isMobile} = useAppContext()
 
     return (
-        <Wrapper> 
+        <Wrapper className={isMobile? 'mobile' : ''}> 
             <UiBoxContainerStyled elevation={3} className={isMobile? 'mobile' : ''}> 
-                <TitleStyled>{props.title}</TitleStyled>
+                <TitleStyled className={isMobile? 'mobile' : ''}>{props.title}</TitleStyled>
 
                 {props.children}
             </UiBoxContainerStyled>
@@ -27,6 +26,10 @@ export const UiBoxContainer: FC<UiBoxContainerProps> = (props) => {
 const Wrapper = styled.div`
     display: left;
     padding: 5px;
+    
+    &.mobile {
+        padding: 0;
+    }
 `
 
 const TitleStyled = styled.div`
@@ -34,6 +37,11 @@ const TitleStyled = styled.div`
     padding: 0 !important;
     margin: 10px 0 40px !important;
     width: fit-content;
+
+    &.mobile {
+        font-size: 1.5rem;
+        margin: 25px 0 20px !important;
+    }
 `
 
 const UiBoxContainerStyled = styled(Paper)`
@@ -49,12 +57,10 @@ const UiBoxContainerStyled = styled(Paper)`
     }
 
     &.mobile {
-        > * {
-        margin: 0 0 36px;
+        padding: 10px;
 
-      &:last-child {
-        margin: 0 36px 0px;
-      }
+        > * {
+        margin: 0 0 15px;
     }
 }
 

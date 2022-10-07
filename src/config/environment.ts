@@ -1,0 +1,1 @@
+export const VERSION = process.env.REACT_VERSION || '0.0.1';

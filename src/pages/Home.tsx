@@ -10,6 +10,7 @@ export const Home: FC = () => {
             <LogoStyled src={BackgroundImage} alt="logo" />
         </TitleContainerStyled>
 
+
     </PageWrapper>
     )
 }
@@ -33,4 +34,3 @@ const LogoStyled = styled.img`
     width: 200px;
     height: 200px;
 `
-

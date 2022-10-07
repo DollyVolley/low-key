@@ -5,11 +5,13 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useChatDataContext } from '@/state/chat-data';
+import { useAppContext } from '@/state/app';
 
 export const ManageChatHeader: FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const {currentChatData} = useChatDataContext()
+    const {isMobile} = useAppContext()
     
     const [routeName, setRouteName] = useState('')
 
@@ -26,12 +28,12 @@ export const ManageChatHeader: FC = () => {
     }, [location])
 
     const canGoBack = useMemo(() => {
-        return currentChatData?.isStarted || false
-    }, [currentChatData])
+        return currentChatData?.isStarted && routeName !== 'Add Chat'
+    }, [currentChatData, routeName])
 
 
     function onTitleClick(): void {
-        if(currentChatData?.isStarted) {
+        if(currentChatData?.isStarted ) {
             navigate("/chat")
         }
     }
@@ -39,7 +41,7 @@ export const ManageChatHeader: FC = () => {
     return (
         <HeaderWrapperStyled>
             {canGoBack && <ArrowBackIosIcon onClick={onTitleClick} className='arrow-icon' /> }
-            <TitleStyled>{routeName}</TitleStyled>
+            <TitleStyled className={isMobile? 'mobile' : ''}>{routeName}</TitleStyled>
         </HeaderWrapperStyled>
     )
 }
@@ -53,7 +55,7 @@ const HeaderWrapperStyled = styled.div`
     padding: 0 var(--max-width-padding);
 
     .arrow-icon { 
-        margin-top: 30px;
+        margin-top: 25px;
         margin-left: 10px;
         color: #bbb;
         cursor: pointer;
@@ -69,4 +71,8 @@ const TitleStyled = styled.div`
     text-align: left;
     font-size: 2rem;
     font-weight: bold;
+
+    &.mobile {
+        font-size: 1.5rem;
+    }
 `

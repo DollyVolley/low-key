@@ -44,6 +44,6 @@ const ApplicationWrapperStyled = styled.div`
     `
 const RouteWrapperStyled = styled.div`
     &.persistentDrawer {
-        margin-left: 250px;
+        margin-left: 200px;
     }
 `
