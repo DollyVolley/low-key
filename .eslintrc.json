@@ -1,0 +1,35 @@
+{
+  "root": true,
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "project": "./apps/dao/tsconfig.json",
+    "parser": "@typescript-eslint/parser",
+    "extraFileExtensions": [".vue"],
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["@typescript-eslint"],
+  "extends": ["plugin:vue/recommended", "airbnb-typescript/base", "eslint-config-prettier"],
+  "ignorePatterns": ["**/stories/**/*.stories.ts"],
+  "rules": {
+    "import/no-unresolved": "off",
+    "class-methods-use-this": "off",
+    "no-param-reassign": "off",
+    "@typescript-eslint/lines-between-class-members": ["error", "always", { "exceptAfterSingleLine": true }],
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "arrow-body-style": "off",
+    "vue/max-attributes-per-line": "off",
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "prefer-destructuring": "warn",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-unused-vars": "off",
+    "prefer-arrow-callback": "off",
+    "import/extensions": "off",
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "off"
+  }
+}

@@ -2,10 +2,10 @@
 
 IMAGE_NAME="bodywithoutorgans/low-key"
 
-TAG="$(node -pe "require('./package.json')['version']")"
-echo $TAG lel
+VERSION="$(node -pe "require('./package.json')['version']")"
+echo $VERSION 
 
 REGISTRY="hub.docker.com"
 
-docker build -t ${IMAGE_NAME}:${TAG} -t ${IMAGE_NAME}:latest .
+docker build -t ${IMAGE_NAME}:${VERSION} -t ${IMAGE_NAME}:latest --build-arg version=$VERSION . 
 docker push ${IMAGE_NAME}

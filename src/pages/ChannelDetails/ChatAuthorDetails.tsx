@@ -51,7 +51,7 @@ export const ChatAuthorDetails: FC = () => {
                 </SectionWrapperStyled>
 
                 <ButtonWrapperStyled>
-                    <UIButton text="Start Chatting" disabled={!subscriptionLink} isLoading={loading} onClick={onStartChannel}/>    
+                    <UIButton text="Start Chatting" disabled={!subscriptionLink} isLoading={loading} onClick={onStartChannel} variant='outlined'/>    
                 </ButtonWrapperStyled>
             </UiBoxContainer>
         </>

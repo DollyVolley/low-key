@@ -6,9 +6,16 @@ import 'typeface-roboto'
 import { ChatDataContextProvider } from './state/chat-data';
 import { ChatClientProvider } from './state/chat-client';
 import { AppProvider } from './state/app/AppProvider';
+import * as serviceWorker from './serviceWorker';
+import { testParallel } from './logic/streams-service/test/test';
 
 const container = document.getElementById('root')
 const root = createRoot(container!)
+
+/*
+testParallel()
+testSerial() 
+*/
 
 const RootComponent: FC = () => {
     return (
@@ -23,3 +30,5 @@ const RootComponent: FC = () => {
 }
 
 root.render(<RootComponent/>)
+
+serviceWorker.register()

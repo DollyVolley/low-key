@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="../public/manifest.json  " />
+    <link rel="apple-touch-icon" href="../public/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" href="../public/favicon.png" />
+    <meta hid="og:image" name="og:image" content="https://low-key.io/og-image.png" />
+
+    <title>low-key</title>
+    <meta
+      hid="description"
+      name="description"
+      content="Private communication without any middle man."
+    />
+
+    <meta hid="og:title" name="og:title" content="low-key" />
+    <meta
+      hid="og:description"
+      name="og:description"
+      content="Private communication without any middle man."
+    />
+    <meta hid="og:type" name="og:type" content="website" />
+    <meta hid="og:url" name="og:url" content="https://low-key.io" />
+    <meta hid="og:site_name" name="og:site_name" content="low-key" />
+
+    <meta name="theme-color" content="#FAFAFA" />
+    <meta name="msapplication-navbutton-color" content="#FAFAFA" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#FAFAFA" />
+
+    <!-- Javascript disabled styled -->
+    <style>
+      .app-javascript-disabled {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000000;
+        box-sizing: border-box;
+        user-select: none;
+        background: #fafafa;
+        font-family: sans-serif;
+        color: #06002b;
+        text-align: center;
+        font-size: 24px;
+        line-height: 1.7;
+      }
+
+      .app-javascript-disabled__content {
+        padding: 0 20px;
+      }
+
+      .app-javascript-disabled__link {
+        color: #276ef1;
+        border-bottom: 2px solid #276ef1;
+        transition: 0.2s all;
+        text-decoration: none;
+      }
+
+      .app-javascript-disabled__link:hover {
+        opacity: 0.75;
+      }
+
+      .app-javascript-disabled__link:active {
+        opacity: 0.45;
+      }
+
+      @media screen and (max-width: 840px) {
+        .app-javascript-disabled__content {
+          max-width: 600px;
+        }
+      }
+
+      @media screen and (max-width: 500px) {
+        .app-javascript-disabled {
+          font-size: 18px;
+        }
+      }
+
+      @media screen and (max-width: 375px) {
+        .app-javascript-disabled {
+          font-size: 16px;
+        }
+      }
+    </style>
+
+  </head>
+  <body>
+    <!-- Javascript disabled screen -->
+    <noscript>
+      <div class="app-javascript-disabled">
+        <div class="app-javascript-disabled__content">
+          <div>You need to enable JavaScript in your browser to interact with Brokkr</div>
+          <div>
+            <a
+              class="app-javascript-disabled__link"
+              href="https://www.google.com/search?q=how+to+enable+javascript+in+browser&oq=how+to+enable+javascript+in+browser"
+              target="_blank"
+            >
+              How to enable Javascript in browser?
+            </a>
+          </div>
+        </div>
+      </div>
+    </noscript>
+
+    <!-- LOADING SCREEN -->
+
+    <div id="root"></div>
+  </body>
+</html>

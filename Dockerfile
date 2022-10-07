@@ -1,5 +1,9 @@
 FROM node:14.17.0 as build-stage
 
+ARG version
+ENV REACT_VERSION=$version
+RUN echo "----- Building version $REACT_VERSION -----"
+
 WORKDIR /app
 COPY ./ .
 RUN yarn

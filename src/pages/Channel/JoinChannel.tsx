@@ -5,6 +5,8 @@ import { UIButton } from '@/components/ui/button/UIButton';
 import { UITextField } from '@/components/ui/text-field/UITextField';
 import { UiBoxContainer } from '@/components/ui/container/UiBoxContainer';
 import { useChatManager } from '@/hooks/useChatManager';
+import { useAppContext } from '@/state/app';
+import { UiPageWrapper } from '@/components/ui/page-wrapper/UiPageWrapper';
 
 export const JoinChannel: FC = () => {
     const {joinChat} = useChatManager()
@@ -40,14 +42,14 @@ export const JoinChannel: FC = () => {
     }
 
     return (
-    <PageWrapper> 
+    <UiPageWrapper> 
         <UiBoxContainer title={'Join existing Chat'}>
 
             <SectionWrapperStyled>
+                <UITextField label={'Join Link'} value={link} setValue={setLink} />
                 <TextWrapperStyled>
                     If you don't have a Join Link you can create a new chat and invite your chat partner <Link to={'/channel/create'}>here</Link>
                 </TextWrapperStyled>
-                <UITextField label={'Join Link'} value={link} setValue={setLink} />
             </SectionWrapperStyled>
             
             <SectionWrapperStyled>
@@ -55,22 +57,18 @@ export const JoinChannel: FC = () => {
             </SectionWrapperStyled>
 
             <ButtonWrapperStyled>
-                <UIButton text="Join" isLoading={loading} onClick={onJoin} disabled={isButtonDisabled()}/>
+                <UIButton text="Join" isLoading={loading} onClick={onJoin} disabled={isButtonDisabled()} variant='outlined'/>
             </ButtonWrapperStyled>
 
         </UiBoxContainer>
-    </PageWrapper>
+    </UiPageWrapper>
     )
 }
 
-const PageWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-top: 5vh;
-`
-
 const TextWrapperStyled = styled.div`
-    margin-bottom: 20px;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #999;
 `
 
 const SectionWrapperStyled = styled.div`

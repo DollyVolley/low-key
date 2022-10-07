@@ -1,34 +1,48 @@
 import React, {FC} from 'react';
 import styled from "styled-components";
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ChannelList } from './components/ChannelList';
+import { useAppContext } from '@/state/app';
+import { VERSION } from '@/config/environment';
+
 
 const LogoImage = require('@/assets/images/logo.png');
 
 
 export const SideBar: FC = () => {
+    const {setIsMenuOpen} = useAppContext()
+    const navigate = useNavigate()
+    
+
+
+    function navigateTo(path: string) {
+        navigate(path)
+        setIsMenuOpen(false)
+    }
+
     return (
     <div>
-        <LogoContainer to="/home">
+        <LogoContainer onClick={() => navigateTo('/home')}>
             <LogoStyled src={LogoImage} alt="logo" />
         </LogoContainer>
 
         <NewContactMenuStyled>
-            <MenuButtonStyled to="/channel/create">Create Chat</MenuButtonStyled> 
-            <MenuButtonStyled to="/channel/join">Join Chat</MenuButtonStyled> 
+            <MenuButtonStyled onClick={() => navigateTo('/channel/create')}>Create Chat</MenuButtonStyled> 
+            <MenuButtonStyled onClick={() => navigateTo('/channel/join')}>Join Chat</MenuButtonStyled> 
         </NewContactMenuStyled>
 
+        <VersionTextStyled>{VERSION}</VersionTextStyled>
         <ChannelList/>
 
     </div>
     )
 }
 
-const LogoContainer = styled(Link)`
-    margin: 0 65px 0 ;
+const LogoContainer = styled.div`
+    margin: 0 40px 0 ;
     padding: 10px; 
-
+    cursor: pointer;
 `
 
 const LogoStyled = styled.img`
@@ -41,12 +55,21 @@ const NewContactMenuStyled = styled.div`
     padding: 20px 0;
 `
 
-const MenuButtonStyled = styled(Link)`
+const MenuButtonStyled = styled.div`
     color: #3a3a3e;
     text-decoration: none;
     font-size: 16pt;
     font-weight: bold;
     margin: 10px 0;
     display: block;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
 `
 
+const VersionTextStyled = styled.span`
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+    font-size: 10pt;
+    color: #3a3a3e;
+`

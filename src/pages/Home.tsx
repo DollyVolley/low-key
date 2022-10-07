@@ -2,13 +2,14 @@ import React, {FC} from 'react';
 import styled from "styled-components";
 
 export const Home: FC = () => {
-    const BackgroundImage = require('@/assets/images/logo.png');
+    const BackgroundImage = require('@/assets/images/background.png');
 
     return (
     <PageWrapper> 
         <TitleContainerStyled>
             <LogoStyled src={BackgroundImage} alt="logo" />
         </TitleContainerStyled>
+
 
     </PageWrapper>
     )
@@ -33,4 +34,3 @@ const LogoStyled = styled.img`
     width: 200px;
     height: 200px;
 `
-

@@ -48,10 +48,9 @@ export const ChatClientProvider: FC<PropsWithChildren<any>> = ({ children }) => 
 
 
   async function setClient(client: ActiveClient, messages? : ChatMessage[]): Promise<void> {
-    console.debug(`Setting client for ${client.id}. Index: ${client.index}`)
     if(messages?.length) addMessages(client.id, messages)
 
-    if(clientMap[client.id] && clientMap[client.id].index >= client.index) {
+    if(clientMap[client.id] && clientMap[client.id].index > client.index) {
       console.error('[CLIENT] oh no - i wanted to overwrite an advanced state')
       return
     }
