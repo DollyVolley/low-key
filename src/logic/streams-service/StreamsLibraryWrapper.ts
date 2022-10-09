@@ -180,10 +180,10 @@ export class StreamsLibraryWrapper  {
         let root = ''
 
         if(clientType === ClientType.AUTHOR) {
-            client = new streams.Author(seed, sendOption.clone(), streams.ChannelType.SingleBranch ) as streamsLib.Author
+            client = new streams.Author(seed, sendOption.clone(), streams.ChannelType.MultiBranch ) as streamsLib.Author
             root = client.channel_address().toString() 
         } else {
-            client = new streams.Subscriber(seed, sendOption.clone(), streams.ChannelType.SingleBranch ) as streamsLib.Subscriber
+            client = new streams.Subscriber(seed, sendOption.clone(), streams.ChannelType.MultiBranch ) as streamsLib.Subscriber
         }
 
         return {
