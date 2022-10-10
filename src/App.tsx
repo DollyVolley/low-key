@@ -17,6 +17,7 @@ export const App: FC = () => {
 
     useEffect(function manageDrawerVisibility() {
         setIsMenuOpen(!is1200PxOrLess)
+        console.log(process.env.REACT_APP_VERSION)
     }, [is1200PxOrLess])
 
     return (

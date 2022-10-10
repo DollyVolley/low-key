@@ -3,7 +3,7 @@ import {instantiateStreams} from "./lib/instantiateStreams";
 import streamsLib from './lib/streams/streams'
 import {generateSeed} from "./utils/generateSeed";
 import { ChatMessage } from "@/types/chat";
-import { client_getUnspentAddress } from "./lib/streams/streams_bg.wasm";
+import { v4 as uuidv4 } from 'uuid';
 
 const NODE_URL = "https://hornet.low-key.io/"
 let streams: any
@@ -116,7 +116,10 @@ export class StreamsLibraryWrapper  {
             lastLink = msg.link.toString()
             const content = streams.from_bytes(msg.message?.get_masked_payload())
 
+            console.log('New Content: ',content)
+
             return {
+                id: uuidv4(),
                 timestamp: Date.now(),
                 content,
                 isOwn: false,

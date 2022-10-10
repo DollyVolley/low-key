@@ -15,6 +15,7 @@ export interface ChatData {
 }
 
 export interface ChatMessage {
+    id: string,
     timestamp: number,
     isOwn: boolean,
     content: string,

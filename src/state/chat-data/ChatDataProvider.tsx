@@ -36,6 +36,11 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   }, [account])
 
   function setChatData(chatData: ChatData): void {
+    if(chatData.messages.length <= chatDataMap[chatData.id].messages.length ) {
+      console.log('i fucked up')
+      throw new Error('Des is gar keine Fläche wo bäume wachsen')
+    }
+
     setChatDataMap({
       ...chatDataMap,
       [chatData.id]: chatData,
@@ -69,9 +74,9 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   }
 
   function addMessages(chatID: string, messages: ChatMessage[]) {  
-    const newMessageTimestamps = messages.map(message => message.timestamp)
+    const newMessageIDS = messages.map(message => message.id)
     const messagesFiltered = chatDataMap[chatID].messages.filter((message: ChatMessage) => 
-      !newMessageTimestamps.includes(message.timestamp))
+      !newMessageIDS.includes(message.id))
 
     setChatData({
       ...chatDataMap[chatID],
