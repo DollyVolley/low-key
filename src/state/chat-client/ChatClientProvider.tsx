@@ -48,12 +48,13 @@ export const ChatClientProvider: FC<PropsWithChildren<any>> = ({ children }) => 
 
 
   async function setClient(client: ActiveClient, messages? : ChatMessage[]): Promise<void> {
-    if(messages?.length) addMessages(client.id, messages)
-
     if(clientMap[client.id] && clientMap[client.id].index > client.index) {
       console.error('[CLIENT] oh no - i wanted to overwrite an advanced state')
       return
     }
+
+    if(messages?.length) addMessages(client.id, messages)
+
 
     if(clientMap[client.id] && !clientMap[client.id].links.lastMessage && client.links.lastMessage) {
       setChatStarted(client.id)
@@ -83,7 +84,7 @@ export const ChatClientProvider: FC<PropsWithChildren<any>> = ({ children }) => 
       removeClient,
       isReady,
     }),
-    [isReady, clientMap],
+    [isReady, clientMap, setClient],
   );
 
   return <ChatClientContext.Provider value={contextValue}>{children}</ChatClientContext.Provider>;

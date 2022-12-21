@@ -35,10 +35,12 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
     return account.chatDescriptions.map((description: ChatDescription) => description.chatID)
   }, [account])
 
+  // @todo 
+  // problem scenario 1 | step 3 : here the data is finally set
   function setChatData(chatData: ChatData): void {
-    if(chatData.messages.length <= chatDataMap[chatData.id].messages.length ) {
-      console.log('i fucked up')
-      throw new Error('Des is gar keine Fläche wo bäume wachsen')
+    if(chatDataMap[chatData.id] && 
+        chatData.messages.length < chatDataMap[chatData.id].messages.length ) {
+      throw new Error('State Management Error: lost data (wtf)')
     }
 
     setChatDataMap({
@@ -73,10 +75,12 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
     }
   }
 
+  // @todo 
+  // problem scenario 1 | step 2: here the new data is formed. between the initial msg adds all pending msgs are lost somehow 
   function addMessages(chatID: string, messages: ChatMessage[]) {  
-    const newMessageIDS = messages.map(message => message.id)
+    const newMessageIDs = messages.map(message => message.id)
     const messagesFiltered = chatDataMap[chatID].messages.filter((message: ChatMessage) => 
-      !newMessageIDS.includes(message.id))
+      !newMessageIDs.includes(message.id))
 
     setChatData({
       ...chatDataMap[chatID],

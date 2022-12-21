@@ -5,6 +5,14 @@ It consists of a client software for the users and a distributed ledger technolo
 
 ****
 
+## Issues
+This application suffers from two severe issues, both connected to the state management. The particular areas where the issue is detected 
+is mentioned as comments in the code.
+
+- removal of other pending msgs during confirmation of primer ones (scenario 1 in the code comments)
+- loss of newly received msgs if other chat is not visible during the time of arrival (scenario 2 in the code comments)
+
+
 ## Stack
 * SPA: React 18
 * State Management: Context 
