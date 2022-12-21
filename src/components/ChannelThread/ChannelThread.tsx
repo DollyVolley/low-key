@@ -7,15 +7,11 @@ import { useMediaQueries } from '@/hooks/useMediaQueries';
 import { useCurrentChat } from '@/hooks/useCurrentChat';
 import { ChatMessage } from '@/types/chat';
 import { useNavigate } from 'react-router-dom';
-import { useChatDataContext } from '@/state/chat-data';
-
 
 export const ChannelThread: FC = () => {
-    const {messages, postMessage: sendMessage, markMessagesSeen ,id} = useCurrentChat()
-    
+    const {messages, postMessage: sendMessage, markMessagesSeen, id} = useCurrentChat()
     const navigate = useNavigate()
     const bottomRef = useRef<HTMLDivElement>(null);
-    const {is1300PxOrLess} = useMediaQueries()
 
 
     useEffect(function onChannelChange() { 
