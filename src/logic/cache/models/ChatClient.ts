@@ -27,7 +27,6 @@ export class ChatClientCache extends AbstractModelCache {
   }
 
   set(client: ArchiveClient): void {
-    console.log(`SET client for ${client.id} ${JSON.stringify(client.links)}`)
     this.storage.setItem(this.getChatModelKey(client.id), JSON.stringify(client));
   }
 

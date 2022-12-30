@@ -116,7 +116,7 @@ export class StreamsLibraryWrapper  {
             lastLink = msg.link.toString()
             const content = streams.from_bytes(msg.message?.get_masked_payload())
 
-            console.log('New Content: ',content)
+            console.log(`Client ${client.id} received new message: ${content}`)
 
             return {
                 id: uuidv4(),

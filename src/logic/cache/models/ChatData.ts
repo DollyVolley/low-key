@@ -28,7 +28,7 @@ export class ChatDataCache extends AbstractModelCache {
   }
 
   set(chatData: ChatData): void {
-    console.log(`SET data for chat ${chatData.name} ${chatData.isStarted ? '' : '(inactive)'} with ${chatData.messages.length} messages`)
+    console.log(`Persist data for chat ${chatData.name} ${chatData.isStarted ? '' : '(inactive)'} with ${chatData.messages.length} messages`)
     this.storage.setItem(this.getChatModelKey(chatData.id), JSON.stringify(chatData));
   }
 

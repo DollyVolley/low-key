@@ -56,8 +56,8 @@ export class StreamsService {
         return {
             client: result.client,
             messages: result.messages || []
-    }
         }
+    }
 
     public static async exportClient(client: ActiveClient, password: string): Promise<ArchiveClient> {
         const result = await StreamsService.addActionToQueue(
@@ -97,22 +97,25 @@ export class StreamsService {
             action,
         })
 
+        // nothing currently going on, first element in the queue so starting it
         if(StreamsService.actionQueue[client.id].length === 1) {
             this.progressQueue(client)
         }
 
-
-    return new Promise((resolve) => {
-        StreamsService.eventBus.subscribe(id, 
-            function resolveResponse ({client, messages, exportedClient}: StreamsResponse){
-                StreamsService.eventBus.unsubscribe(id, resolveResponse)
-                resolve({client, messages, exportedClient});
+        return new Promise((resolve) => {
+            console.log(`Add ${client.id} to queue (size: ${StreamsService.actionQueue[client.id].length})`)
+            StreamsService.eventBus.subscribe(id, 
+                function resolveResponse ({client, messages, exportedClient}: StreamsResponse){
+                    StreamsService.eventBus.unsubscribe(id, resolveResponse)
+                    console.log(`Final ${client.id} with ${messages?.length}`)
+                    resolve({client, messages, exportedClient});
             })
         });
     }
 
     private static async progressQueue(client: ActiveClient): Promise<void> {
         const id = StreamsService.actionQueue[client.id][0].id
+        console.log(client.id, 'progressing')
         const result = await StreamsService.actionQueue[client.id][0].action(client)
         this.eventBus.trigger(id, result)
 
