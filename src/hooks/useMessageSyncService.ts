@@ -20,7 +20,7 @@ export function useMessageSyncService(){
 
                 if(hasStarted ){ 
                     const response = await StreamsService.fetchMessages(client)
-                    if(response.messages.length) {
+                    if(response && response.messages.length) {
                         isNewMessage = true
                         setClient(response.client, response.messages)
                     }

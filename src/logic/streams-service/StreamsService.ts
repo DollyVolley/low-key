@@ -1,10 +1,11 @@
 import { ChatMessage } from "@/types/chat";
 import { makeEventBus } from "../event-bus";
 import { loadStreams, StreamsLibraryWrapper } from "./StreamsLibraryWrapper";
-import { StreamsResponse, ActionQueue, ActiveClient, StreamsAction, ArchiveClient, MessageResponse } from "./types";
+import { StreamsResponse, ActionQueue, ActiveClient, StreamsAction, ArchiveClient, MessageResponse, IsFetchQueuedMap } from "./types";
 
 export class StreamsService {
     public static actionQueue: ActionQueue = {}
+    public static isFetchQueued: IsFetchQueuedMap = {}
     private static eventBus = makeEventBus<{[key: string]: StreamsResponse;}>()
 
     public static async loadStreams(): Promise<void> {
@@ -46,12 +47,18 @@ export class StreamsService {
         }
     }
 
-    public static async fetchMessages(client: ActiveClient): Promise<MessageResponse> {
+    public static async fetchMessages(client: ActiveClient): Promise<void | MessageResponse> {
+        // Do not queue fetch if already in queue
+        if(StreamsService.isFetchQueued[client.id]) return
+
+        StreamsService.isFetchQueued[client.id] = true;
         const result = await StreamsService.addActionToQueue(
             client,
             async (client: ActiveClient) => {
                 return StreamsLibraryWrapper.fetchMessages(client)}
         )
+
+        StreamsService.isFetchQueued[client.id] = false;
 
         return {
             client: result.client,

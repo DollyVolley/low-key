@@ -10,8 +10,8 @@ describe('Debugging', async() => {
     let response1 = await StreamsService.sendMessage(activeClient1, getMsg())  
     let response2 = await StreamsService.fetchMessages(activeClient2)
   
-    response2 = await StreamsService.sendMessage(response2.client, getMsg())
-    response1 = await StreamsService.fetchMessages(activeClient1)
+    response2 = await StreamsService.sendMessage(response2!.client, getMsg())
+    response1 = (await StreamsService.fetchMessages(activeClient1))!
     
     expect(response2.messages.length).toBe(1);
     expect(response1.messages.length).toBe(1);
@@ -23,8 +23,8 @@ describe('Debugging', async() => {
     let response1 = await StreamsService.sendMessage(activeClient1, getMsg())  
     let response2 = await StreamsService.sendMessage(activeClient1, getMsg())
   
-    response2 = await StreamsService.fetchMessages(activeClient2)
-    response1 = await StreamsService.fetchMessages(activeClient1)
+    response2 = (await StreamsService.fetchMessages(activeClient2))!
+    response1 = (await StreamsService.fetchMessages(activeClient1))!
   
     expect(response2.messages.length).toBe(1);
     expect(response1.messages.length).toBe(1);

@@ -2,6 +2,7 @@ import { ChatMessage } from '@/types/chat'
 import streamsLib from './lib/streams'
 
 export type ActionQueue = {[key in string]: StreamsQueueRequest[]}
+export type IsFetchQueuedMap = {[key in string]: boolean}
 
 export type StreamsAction = (client: ActiveClient) => Promise<StreamsResponse>
 
