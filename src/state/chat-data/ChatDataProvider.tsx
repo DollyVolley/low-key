@@ -6,6 +6,8 @@ import { ChatData, ChatDescription, ChatMessage } from "@/types/chat";
 import { describeChat } from "@/utils/channel";
 import { ChatDataContext } from "./ChatDataContext";
 
+let persistentChatDataMap : {[key in string]: ChatData} = {}
+
 export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }) => {
   const [account, setAccount] = useState<Account>({} as Account)  
   const [currentChatID, setCurrentChatID] = useState("");
@@ -38,10 +40,7 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   // @todo 
   // problem scenario 1 | step 3 : here the data is finally set
   function setChatData(chatData: ChatData): void {
-    if(chatDataMap[chatData.id] && 
-        chatData.messages.length < chatDataMap[chatData.id].messages.length ) {
-      throw new Error('State Management Error: lost data (wtf)')
-    }
+    persistentChatDataMap[chatData.id] = chatData
 
     setChatDataMap({
       ...chatDataMap,
@@ -75,19 +74,18 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
     }
   }
 
-  // @todo 
-  // problem scenario 1 | step 2: here the new data is formed. between the initial msg adds all pending msgs are lost somehow 
   function addMessages(chatID: string, messages: ChatMessage[]) {  
     const newMessageIDs = messages.map(message => message.id)
-    console.log(messages, 'new messages', chatDataMap[chatID].messages)
-    const messagesFiltered = chatDataMap[chatID].messages.filter((message: ChatMessage) => 
+    const messagesFiltered = persistentChatDataMap[chatID].messages.filter((message: ChatMessage) => 
       !newMessageIDs.includes(message.id))
 
-    setChatData({
-      ...chatDataMap[chatID],
+    const newChatData = {
+      ...persistentChatDataMap[chatID],
       isNewMessage: currentChatID !== chatID,
-      messages: [...messagesFiltered, ...messages]
-    })
+      messages: [...messagesFiltered, ...messages].sort((a, b) => a.timestamp - b.timestamp)
+    }
+
+    setChatData(newChatData)
   }
 
   function loadAccount(){
@@ -119,6 +117,7 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
       loadedChatDataMap[id] = chatDataCache.get(id)!
     })
 
+    persistentChatDataMap = loadedChatDataMap
     setChatDataMap(loadedChatDataMap)
   }
 
