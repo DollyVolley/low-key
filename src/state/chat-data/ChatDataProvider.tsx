@@ -79,6 +79,7 @@ export const ChatDataContextProvider: FC<PropsWithChildren<any>> = ({ children }
   // problem scenario 1 | step 2: here the new data is formed. between the initial msg adds all pending msgs are lost somehow 
   function addMessages(chatID: string, messages: ChatMessage[]) {  
     const newMessageIDs = messages.map(message => message.id)
+    console.log(messages, 'new messages', chatDataMap[chatID].messages)
     const messagesFiltered = chatDataMap[chatID].messages.filter((message: ChatMessage) => 
       !newMessageIDs.includes(message.id))
 

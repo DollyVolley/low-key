@@ -2,6 +2,7 @@ import { ChatMessage } from "@/types/chat";
 import { makeEventBus } from "../event-bus";
 import { loadStreams, StreamsLibraryWrapper } from "./StreamsLibraryWrapper";
 import { StreamsResponse, ActionQueue, ActiveClient, StreamsAction, ArchiveClient, MessageResponse, IsFetchQueuedMap } from "./types";
+import { v4 as uuidv4 } from 'uuid';
 
 export class StreamsService {
     public static actionQueue: ActionQueue = {}
@@ -93,7 +94,7 @@ export class StreamsService {
 
     private static async addActionToQueue(client: ActiveClient, action: StreamsAction )
     : Promise<StreamsResponse> {
-        const id = Date.now().toString()
+        const id = uuidv4()
 
         if (!StreamsService.actionQueue[client.id]) {
             StreamsService.actionQueue[client.id] = []
@@ -122,7 +123,6 @@ export class StreamsService {
 
     private static async progressQueue(client: ActiveClient): Promise<void> {
         const id = StreamsService.actionQueue[client.id][0].id
-        console.log(client.id, 'progressing')
         const result = await StreamsService.actionQueue[client.id][0].action(client)
         this.eventBus.trigger(id, result)
 
