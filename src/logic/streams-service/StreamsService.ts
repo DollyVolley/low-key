@@ -9,8 +9,8 @@ export class StreamsService {
     public static isFetchQueued: IsFetchQueuedMap = {}
     private static eventBus = makeEventBus<{[key: string]: StreamsResponse;}>()
 
-    public static async loadStreams(): Promise<void> {
-        return loadStreams()
+    public static async loadStreams(nodeURL?: string): Promise<void> {
+        return loadStreams(nodeURL)
     }
 
     public static async startChat(client : ActiveClient, subscriptionLink: string): Promise<ActiveClient> {
@@ -111,11 +111,11 @@ export class StreamsService {
         }
 
         return new Promise((resolve) => {
-            console.log(`Add ${client.id} to queue (size: ${StreamsService.actionQueue[client.id].length})`)
+            console.debug(`[StreamsService]: Add action for ${client.id} to queue (size: ${StreamsService.actionQueue[client.id].length})`)
             StreamsService.eventBus.subscribe(id, 
                 function resolveResponse ({client, messages, exportedClient}: StreamsResponse){
                     StreamsService.eventBus.unsubscribe(id, resolveResponse)
-                    console.log(`Final ${client.id} with ${messages?.length}`)
+                    console.log(`[StreamsService]: Finalized action for ${client.id} with ${messages?.length} messages`)
                     resolve({client, messages, exportedClient});
             })
         });

@@ -8,21 +8,28 @@ import { CircularProgress, Paper } from '@mui/material';
 
 type MessageCardProps = {
     message: ChatMessage,
-    isOwnMessage: boolean
+    debug?: boolean
 }
 
-export const MessageCard: FC<MessageCardProps> = ({message, isOwnMessage}) => {
+export const MessageCard: FC<MessageCardProps> = ({message, debug}) => {
 
     function onClick(): void {
         window.open(getExplorerURL(message.msgId || ''), '_blank')
     }
     return <>
-        <CardWrapper isOwnMessage={isOwnMessage}>
+        <CardWrapper isOwnMessage={message.isOwn}>
             <MessageContainer 
-                className={`${!message.msgId && "pending"} ${isOwnMessage && "own"}`}
+                className={`${!message.msgId && "pending"} ${message.isOwn && "own"}`}
                 onClick={onClick}
                 elevation={message.msgId? 3: 10}>
                 <MessageContent>{message.content}</MessageContent>
+                { debug && 
+                    <div>
+                        ID: {message.id} <br/> 
+                        msgID: {message.msgId} <br/> 
+                        timeStamp: {message.timestamp} <br/>
+                        isOwn:{message.isOwn} <br/> 
+                    </div> }
                 <FooterStyled>
                     <span>{getFormattedDateTime(message.timestamp)}</span>
                     {message.msgId?

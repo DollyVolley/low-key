@@ -7,12 +7,12 @@ import { useMediaQueries } from '@/hooks/useMediaQueries';
 import { useCurrentChat } from '@/hooks/useCurrentChat';
 import { ChatMessage } from '@/types/chat';
 import { useNavigate } from 'react-router-dom';
+import { DEBUG } from '@/config/environment';
 
 export const ChannelThread: FC = () => {
     const {messages, postMessage: sendMessage, markMessagesSeen, id} = useCurrentChat()
     const navigate = useNavigate()
     const bottomRef = useRef<HTMLDivElement>(null);
-
 
     useEffect(function onChannelChange() { 
         if(!id) {
@@ -35,8 +35,10 @@ export const ChannelThread: FC = () => {
     <MessageThreadWrapper >
         <MessagesWrapper>
                 {messages.map((message: ChatMessage) => {
-                    return <MessageWrapper key={message.timestamp}>
-                        <MessageCard message={message} isOwnMessage={message.isOwn} />
+                    return <MessageWrapper key={message.id}>
+                        <MessageCard 
+                        message={message} 
+                        debug={DEBUG} />
                     </MessageWrapper>
                 })}
                 <div ref={bottomRef} />

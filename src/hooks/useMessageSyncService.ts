@@ -33,7 +33,7 @@ export function useMessageSyncService(){
             })
 
             await Promise.all(workerPromise)
-            console.log("DONE------------------------------------------------------")
+            console.debug("[MessageService]: --------------------------- DONE ---------------------------")
             if(isNewMessage) {
                 try{
                     playNotificationSound()

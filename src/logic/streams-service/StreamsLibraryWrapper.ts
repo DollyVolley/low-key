@@ -5,13 +5,16 @@ import {generateSeed} from "./utils/generateSeed";
 import { ChatMessage } from "@/types/chat";
 import { v4 as uuidv4 } from 'uuid';
 
-const NODE_URL = "https://hornet.low-key.io/"
+const DEFAULT_NODE_URL = "https://hornet.low-key.io/"
+let nodeURL: string
 let streams: any
 
-export async function loadStreams() {
+export async function loadStreams(customNodeURL?: string) {
+    nodeURL = customNodeURL || DEFAULT_NODE_URL
+
     if(streams) return
     streams = await instantiateStreams()
-    console.log("Streams loaded")
+    console.debug(`[StreamsService]: Streams loaded with NodeURL: ${nodeURL}`)
 }
 
 export class StreamsLibraryWrapper  {
@@ -116,8 +119,6 @@ export class StreamsLibraryWrapper  {
             lastLink = msg.link.toString()
             const content = streams.from_bytes(msg.message?.get_masked_payload())
 
-            console.log(`Client ${client.id} received new message: ${content}`)
-
             return {
                 id: uuidv4(),
                 timestamp: Date.now(),
@@ -145,8 +146,8 @@ export class StreamsLibraryWrapper  {
     public static importClient(archivedClient: ArchiveClient, password: string): ActiveClient {
         const clientUint8 = Uint8Array.from(window.atob(archivedClient.streamsClient), (v) => v.charCodeAt(0));
 
-        const options = new streams.SendOptions(NODE_URL, true) as streamsLib.SendOptions
-        const streamsClient = new streams.StreamsClient(NODE_URL, options.clone()) as streamsLib.StreamsClient
+        const options = new streams.SendOptions(nodeURL, true) as streamsLib.SendOptions
+        const streamsClient = new streams.StreamsClient(nodeURL, options.clone()) as streamsLib.StreamsClient
 
         let client: streamsLib.Author | streamsLib.Subscriber
         if(archivedClient.clientType === ClientType.AUTHOR) {
@@ -177,7 +178,7 @@ export class StreamsLibraryWrapper  {
 
     private static makeClient(clientType: ClientType): ActiveClient {
         const seed = generateSeed(81)
-        const sendOption = new streams.SendOptions(NODE_URL, true)
+        const sendOption = new streams.SendOptions(nodeURL, true)
 
         let client :  streamsLib.Author | streamsLib.Subscriber
         let root = ''
